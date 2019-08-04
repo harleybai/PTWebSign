@@ -1,1 +1,293 @@
-{"data": [{"id": 1, "name": "\u516d\u7ef4\u7a7a\u95f4", "url": "http://bt.neu6.edu.cn/forum.php", "signin": 0, "lastdate": "2019-07-13 12:12:02", "pasttime": "21\u59299\u5c0f\u65f6", "status": false, "desc": "Ipv6\u7ad9\u70b9", "delete": true}, {"id": 2, "name": "\u5317\u90ae\u4ebaBT", "url": "https://bt.byr.cn/torrents.php", "signin": 0, "lastdate": "2019-07-13 12:12:03", "pasttime": "21\u59299\u5c0f\u65f6", "status": false, "desc": "Ipv6\u7ad9\u70b9", "delete": true}, {"id": 3, "name": "\u84b2\u516c\u82f1PT", "url": "https://npupt.com/torrents.php", "signin": 0, "lastdate": "2019-07-13 12:12:04", "pasttime": "21\u59299\u5c0f\u65f6", "status": false, "desc": "Ipv6\u7ad9\u70b9", "delete": true}, {"id": 4, "name": "\u5357\u6d0bPT", "url": "https://nanyangpt.com/torrents.php", "signin": 0, "lastdate": "2019-08-03 21:45:28", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 5, "name": "\u8461\u8404", "url": "https://pt.sjtu.edu.cn/torrents.php", "signin": 0, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 6, "name": "TJUPT", "url": "https://www.tjupt.org/torrents.php", "signin": 0, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 7, "name": "\u9ea6\u7530PT", "url": "https://pt.nwsuaf6.edu.cn/torrents.php", "signin": 1, "lastdate": "2019-08-02 21:00:53", "pasttime": "1\u59290\u5c0f\u65f6", "status": false, "desc": "Ipv6\u7ad9\u70b9"}, {"id": 8, "name": "\u77e5\u884cPT", "url": "http://pt.zhixing.bjtu.edu.cn/search/", "signin": 0, "lastdate": "2019-08-02 21:00:53", "pasttime": "1\u59290\u5c0f\u65f6", "status": false, "desc": "Ipv6\u7ad9\u70b9"}, {"id": 9, "name": "\u843d\u6a31", "url": "https://whu.pt/torrents.php", "signin": 1, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 10, "name": "CUGB-PT", "url": "http://pt.cugb.edu.cn/torrents.php", "signin": 0, "lastdate": "2019-08-02 21:00:53", "pasttime": "1\u59290\u5c0f\u65f6", "status": false, "desc": "Ipv6\u7ad9\u70b9"}, {"id": 11, "name": "M-Team", "url": "https://pt.m-team.cc/torrents.php", "signin": 0, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 12, "name": "CMCT", "url": "https://springsunday.net/torrents.php", "signin": 0, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 13, "name": "OURBITS", "url": "https://ourbits.club/torrents.php", "signin": 1, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 14, "name": "KEEP-FRIENDS", "url": "http://pt.keepfrds.com/torrents.php", "signin": 0, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 15, "name": "HDChina", "url": "https://hdchina.org/torrents.php", "signin": 1, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 16, "name": "TTG", "url": "https://totheglory.im/browse.php?c=M", "signin": 1, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 17, "name": "HDSky", "url": "https://hdsky.me/torrents.php", "signin": 0, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 18, "name": "HD4FANS", "url": "https://pt.hd4fans.org/torrents.php", "signin": 1, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 19, "name": "HDTime", "url": "https://hdtime.org/torrents.php", "signin": 1, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 20, "name": "HDU", "url": "http://pt.hdupt.com/torrents.php", "signin": 1, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 21, "name": "HDHome", "url": "http://hdhome.org/torrents.php", "signin": 1, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 22, "name": "CHD", "url": "https://chdbits.co/torrents.php", "signin": 0, "lastdate": "2019-08-03 12:18:34", "pasttime": "0\u59299\u5c0f\u65f6", "status": true, "desc": "", "delete": true}, {"id": 23, "name": "\u6e2f\u77e5\u5802", "url": "https://discfan.net/torrents.php", "signin": 0, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 24, "name": "Open-CD", "url": "https://www.open.cd/torrents.php?boardid=1", "signin": 0, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 25, "name": "HDArea", "url": "https://www.hdarea.co/torrents.php", "signin": 1, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 26, "name": "\u9ad8\u6e05\u8857", "url": "https://chinesemovies.club/torrents.php", "signin": 0, "lastdate": "2019-08-03 12:19:22", "pasttime": "0\u59299\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 27, "name": "\u5929\u96eaPT", "url": "https://skyeysnow.com/forum.php?mod=torrents", "signin": 0, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 28, "name": "Awesome-HD", "url": "https://awesome-hd.me/torrents.php", "signin": 0, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 29, "name": "TorrentLeech", "url": "https://www.torrentleech.org/torrents/browse/index", "signin": 0, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 30, "name": "HDSpace", "url": "https://hd-space.org/index.php?page=torrents", "signin": 0, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 31, "name": "IPT", "url": "https://iptorrents.com/indexipt.php", "signin": 0, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}, {"id": 32, "name": "Blutopia", "url": "https://blutopia.xyz/torrents", "signin": 0, "lastdate": "2019-07-28 16:05:01", "pasttime": "6\u59295\u5c0f\u65f6", "status": true, "desc": ""}], "openandrun": 1, "maxdays": "10"}
+{
+	"data": [{
+		"id": 1,
+		"name": "\u516d\u7ef4\u7a7a\u95f4",
+		"url": "http://bt.neu6.edu.cn/forum.php",
+		"signin": 0,
+		"lastdate": "2019-07-13 12:12:02",
+		"pasttime": "21\u592923\u5c0f\u65f6",
+		"status": false,
+		"desc": "Ipv6\u7ad9\u70b9"
+	}, {
+		"id": 2,
+		"name": "\u5317\u90ae\u4ebaBT",
+		"url": "https://bt.byr.cn/torrents.php",
+		"signin": 0,
+		"lastdate": "2019-07-13 12:12:03",
+		"pasttime": "21\u592923\u5c0f\u65f6",
+		"status": false,
+		"desc": "Ipv6\u7ad9\u70b9"
+	}, {
+		"id": 3,
+		"name": "\u84b2\u516c\u82f1PT",
+		"url": "https://npupt.com/torrents.php",
+		"signin": 0,
+		"lastdate": "2019-07-13 12:12:04",
+		"pasttime": "21\u592923\u5c0f\u65f6",
+		"status": false,
+		"desc": "Ipv6\u7ad9\u70b9"
+	}, {
+		"id": 4,
+		"name": "\u5357\u6d0bPT",
+		"url": "https://nanyangpt.com/torrents.php",
+		"signin": 0,
+		"lastdate": "2019-08-03 21:45:28",
+		"pasttime": "0\u592914\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 5,
+		"name": "\u8461\u8404",
+		"url": "https://pt.sjtu.edu.cn/torrents.php",
+		"signin": 0,
+		"lastdate": "2019-08-04 10:12:56",
+		"pasttime": "0\u59291\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 6,
+		"name": "TJUPT",
+		"url": "https://www.tjupt.org/torrents.php",
+		"signin": 0,
+		"lastdate": "2019-08-03 11:05:01",
+		"pasttime": "1\u59290\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 7,
+		"name": "\u9ea6\u7530PT",
+		"url": "https://pt.nwsuaf6.edu.cn/torrents.php",
+		"signin": 1,
+		"lastdate": "2019-08-02 21:00:53",
+		"pasttime": "1\u592914\u5c0f\u65f6",
+		"status": false,
+		"desc": "Ipv6\u7ad9\u70b9"
+	}, {
+		"id": 8,
+		"name": "\u77e5\u884cPT",
+		"url": "http://pt.zhixing.bjtu.edu.cn/search/",
+		"signin": 0,
+		"lastdate": "2019-08-02 21:00:53",
+		"pasttime": "1\u592914\u5c0f\u65f6",
+		"status": false,
+		"desc": "Ipv6\u7ad9\u70b9"
+	}, {
+		"id": 9,
+		"name": "\u843d\u6a31",
+		"url": "https://whu.pt/torrents.php",
+		"signin": 1,
+		"lastdate": "2019-07-26 16:05:01",
+		"pasttime": "6\u592919\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 10,
+		"name": "CUGB-PT",
+		"url": "http://pt.cugb.edu.cn/torrents.php",
+		"signin": 0,
+		"lastdate": "2019-08-02 21:00:53",
+		"pasttime": "1\u592914\u5c0f\u65f6",
+		"status": false,
+		"desc": "Ipv6\u7ad9\u70b9"
+	}, {
+		"id": 11,
+		"name": "M-Team",
+		"url": "https://pt.m-team.cc/torrents.php",
+		"signin": 0,
+		"lastdate": "2019-07-28 16:05:01",
+		"pasttime": "6\u592919\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 12,
+		"name": "CMCT",
+		"url": "https://springsunday.net/torrents.php",
+		"signin": 0,
+		"lastdate": "2019-07-28 16:05:01",
+		"pasttime": "6\u592919\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 13,
+		"name": "OURBITS",
+		"url": "https://ourbits.club/torrents.php",
+		"signin": 1,
+		"lastdate": "2019-08-04 10:13:48",
+		"pasttime": "0\u59291\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 14,
+		"name": "KEEP-FRIENDS",
+		"url": "http://pt.keepfrds.com/torrents.php",
+		"signin": 0,
+		"lastdate": "2019-07-28 16:05:01",
+		"pasttime": "6\u592919\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 15,
+		"name": "HDChina",
+		"url": "https://hdchina.org/torrents.php",
+		"signin": 1,
+		"lastdate": "2019-07-28 16:05:01",
+		"pasttime": "6\u592919\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 16,
+		"name": "TTG",
+		"url": "https://totheglory.im/browse.php?c=M",
+		"signin": 1,
+		"lastdate": "2019-07-28 16:05:01",
+		"pasttime": "6\u592919\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 17,
+		"name": "HDSky",
+		"url": "https://hdsky.me/torrents.php",
+		"signin": 0,
+		"lastdate": "2019-07-28 16:05:01",
+		"pasttime": "6\u592919\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 18,
+		"name": "HD4FANS",
+		"url": "https://pt.hd4fans.org/torrents.php",
+		"signin": 1,
+		"lastdate": "2019-08-04 10:14:21",
+		"pasttime": "0\u59291\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 19,
+		"name": "HDTime",
+		"url": "https://hdtime.org/torrents.php",
+		"signin": 1,
+		"lastdate": "2019-07-28 16:05:01",
+		"pasttime": "6\u592919\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 20,
+		"name": "HDU",
+		"url": "http://pt.hdupt.com/torrents.php",
+		"signin": 1,
+		"lastdate": "2019-07-28 16:05:01",
+		"pasttime": "6\u592919\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 21,
+		"name": "HDHome",
+		"url": "http://hdhome.org/torrents.php",
+		"signin": 1,
+		"lastdate": "2019-07-28 16:05:01",
+		"pasttime": "6\u592919\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 22,
+		"name": "CHD",
+		"url": "https://chdbits.co/torrents.php",
+		"signin": 0,
+		"lastdate": "2019-08-03 12:18:34",
+		"pasttime": "0\u592923\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 23,
+		"name": "\u6e2f\u77e5\u5802",
+		"url": "https://discfan.net/torrents.php",
+		"signin": 0,
+		"lastdate": "2019-07-28 16:05:01",
+		"pasttime": "6\u592919\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 24,
+		"name": "Open-CD",
+		"url": "https://www.open.cd/torrents.php?boardid=1",
+		"signin": 0,
+		"lastdate": "2019-07-28 16:05:01",
+		"pasttime": "6\u592919\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 25,
+		"name": "HDArea",
+		"url": "https://www.hdarea.co/torrents.php",
+		"signin": 1,
+		"lastdate": "2019-07-28 16:05:01",
+		"pasttime": "6\u592919\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 26,
+		"name": "\u9ad8\u6e05\u8857",
+		"url": "https://chinesemovies.club/torrents.php",
+		"signin": 0,
+		"lastdate": "2019-08-03 12:19:22",
+		"pasttime": "0\u592923\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 27,
+		"name": "\u5929\u96eaPT",
+		"url": "https://skyeysnow.com/forum.php?mod=torrents",
+		"signin": 0,
+		"lastdate": "2019-07-28 16:05:01",
+		"pasttime": "6\u592919\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 28,
+		"name": "Awesome-HD",
+		"url": "https://awesome-hd.me/torrents.php",
+		"signin": 0,
+		"lastdate": "2019-07-28 16:05:01",
+		"pasttime": "6\u592919\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 29,
+		"name": "TorrentLeech",
+		"url": "https://www.torrentleech.org/torrents/browse/index",
+		"signin": 0,
+		"lastdate": "2019-07-28 16:05:01",
+		"pasttime": "6\u592919\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 30,
+		"name": "HDSpace",
+		"url": "https://hd-space.org/index.php?page=torrents",
+		"signin": 0,
+		"lastdate": "2019-07-28 16:05:01",
+		"pasttime": "6\u592919\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 31,
+		"name": "IPT",
+		"url": "https://iptorrents.com/indexipt.php",
+		"signin": 0,
+		"lastdate": "2019-07-28 16:05:01",
+		"pasttime": "6\u592919\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}, {
+		"id": 32,
+		"name": "Blutopia",
+		"url": "https://blutopia.xyz/torrents",
+		"signin": 0,
+		"lastdate": "2019-07-28 16:05:01",
+		"pasttime": "6\u592919\u5c0f\u65f6",
+		"status": true,
+		"desc": ""
+	}],
+	"openandrun": 1,
+	"maxdays": "10"
+}

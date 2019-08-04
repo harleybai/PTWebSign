@@ -65,10 +65,11 @@ def update_info(t_index):
         if val["id"] == t_index:
             val["name"] = request.query.name
             val["url"] = request.query.url
-            if request.query.status == "true":
+            if request.query.status == "1":
                 val["status"] = True
             else:
                 val["status"] = False
+            val["lastdate"] = request.query.lastdate
             val["desc"] = request.query.desc
             break
     save_data(pt_info)
