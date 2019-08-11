@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="PT Search">
+    <meta name="author" content="harleybai">
+    <title>PT Sign In</title>
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/bootstrap-table.min.css" rel="stylesheet">
+    <link href="static/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <style type="text/css">
+        html {
+            position: relative;
+            min-height: 100%;
+        }
+
+        body {
+            padding-top: 50px;
+            margin-bottom: 40px;
+        }
+
+        .navbar-fixed-top {
+            border: 0;
+        }
+
+        .main {
+            padding: 20px;
+            margin-top: 0;
+        }
+
+        @media (min-width: 768px) {
+            .main {
+                padding-right: 40px;
+                padding-left: 40px;
+            }
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            width: auto;
+            padding: 0 15px;
+        }
+
+        td.data-inline {
+            word-break: keep-all;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #f5f5f5">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">PT Sign In</a>&nbsp;&nbsp;&nbsp;
+                <a class="navbar-brand" href="#">Today Play</a>&nbsp;&nbsp;&nbsp;
+                <a class="navbar-brand" href="/video">Parse Video Link</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2 col-md-10 col-md-offset-1 main">
+                <div id="toolbar" class="form-inline">
+                    <button type="button" id="new_site" class="btn btn-primary"><i class="fa fa-plus-square-o"></i> New Video Info </button>
+                </div>
+                <div class="table-responsive">
+                    <table id="table"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="https://github.com/harleybai/PTWebSign" target="_blank">Powered By @harleybai</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <div id="my_modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-ml" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" id="btn_submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+    <script src="static/js/bootstrap-table.min.js"></script>
+    <script>
+        var dayOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        var weekday = dayOfWeek[new Date().getDay()];
+
+        //时间格式化
+        Date.prototype.format = function (format) {
+            let o = {
+                "M+": this.getMonth() + 1, //month
+                "d+": this.getDate(), //day
+                "h+": this.getHours(), //hour
+                "m+": this.getMinutes(), //minute
+                "s+": this.getSeconds(), //second
+                "q+": Math.floor((this.getMonth() + 3) / 3), //quarter
+                "S": this.getMilliseconds() //millisecond
+            };
+            format = (format == "") ? "yyyy-MM-dd hh:mm:ss" : format;
+            if (/(y+)/.test(format))
+                format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (let k in o)
+                if (new RegExp("(" + k + ")").test(format))
+                    format = format.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+            return format;
+        }
+
+
+        window.operateEvents = {
+            'click .edit': function (e, value, row, index) {
+                $.getJSON('/today/week/' + row['id'], function (res) {
+                    console.log(row['id'], res);
+                    if (res.code == 0) {
+                        let week = res.data.week;
+                        $('#my_modal div.modal-body').html([
+                            '<form class="form-horizontal" role="form"><div class="form-group"><label for="f_id" class="col-sm-2 control-label">Id</label><div class="col-sm-10"><input id="f_id" type="text" class="form-control" readonly value="' + row['id'] + '"></div></div>',
+                            '<div class="form-group"><label for="f_pic" class="col-sm-2 control-label">Pic</label><div class="col-sm-10"><input id="f_pic" type="text" class="form-control" value="' + row['pic'] + '"></div></div>',
+                            '<div class="form-group"><label for="f_title" class="col-sm-2 control-label">Title</label><div class="col-sm-10"><input id="f_title" type="text" class="form-control" value="' + row['title'] + '"></div></div>',
+                            '<div class="form-group"><label for="f_week" class="col-sm-2 control-label">Week</label><div class="col-sm-10"><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Monday">星期一</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Tuesday">星期二</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Wednesday">星期三</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Thursday">星期四</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Friday">星期五</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Saturday">星期六</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Sunday">星期日</label></div></div>',
+                            '<div class="form-group"><label for="f_time" class="col-sm-2 control-label">Time</label><div class="col-sm-10"><input id="f_time" type="time" class="form-control" value="' + row['time'] + '"></div></div>',
+                            '<div class="form-group"><label for="f_douban" class="col-sm-2 control-label">Douban</label><div class="col-sm-10"><input id="f_douban" type="text" class="form-control" value="' + row['douban'] + '"></div></div>',
+                            '<div class="form-group"><label for="f_bgm" class="col-sm-2 control-label">Bgm</label><div class="col-sm-10"><input id="f_bgm" type="text" class="form-control" value="' + row['bgm'] + '"></div></div>',
+                            '<div class="form-group"><label for="f_video" class="col-sm-2 control-label">Video</label><div class="col-sm-10"><input id="f_video" type="text" class="form-control" value="' + row['video'] + '"></div></div>',
+                            '</form>'
+                        ].join(''));
+                        $("input:checkbox").each(function () {
+                            let w = $(this).val();
+                            if (week.indexOf(w) >= 0) {
+                                $(this).attr("checked", 'checked');
+                            }
+                        });
+                        $('#my_modal').modal();
+                        //submit
+                        $('#btn_submit').unbind('click');
+                        $('#btn_submit').click(function () {
+                            let data = {};
+                            data['pic'] = $("input#f_pic").val().trim();
+                            data['title'] = $("input#f_title").val().trim();
+                            data['week'] = [];
+                            $.each($("input:checkbox:checked"), function () {
+                                data['week'].push($(this).val());
+                            })
+                            data['time'] = $("input#f_time").val().trim();
+                            data['douban'] = $("input#f_douban").val().trim();
+                            data['bgm'] = $("input#f_bgm").val().trim();
+                            data['video'] = $("input#f_video").val().trim();
+                            data['id'] = row['id'];
+
+                            $.post('/today/update', {
+                                'data': JSON.stringify(data)
+                            }, function (res) {
+                                console.log(res);
+                                if (res.code == 0) {
+                                    $('#my_modal button.close').click();
+                                    $('#table').bootstrapTable('remove', {
+                                        field: 'id',
+                                        values: [row['id']]
+                                    });
+                                    // if (data['week'].indexOf(dayOfWeek[new Date().getDay()]) >= 0)
+                                    table_append(data);
+                                }
+                            });
+                        })
+                    }
+                });
+            },
+            'click .remove': function (e, value, row, index) {
+                $.post('/today/delete/' + row['id'], function (res) {
+                    if (res.code == 0) {
+                        $('#table').bootstrapTable('remove', {
+                            field: 'id',
+                            values: [row['id']]
+                        });
+                    }
+                    console.log(res);
+                });
+            }
+        }
+
+        $('#table').bootstrapTable({
+            classes: "table table-hover table-striped",
+            search: true,
+            searchAlign: 'left',
+            striped: true,
+            sortOrder: "asc",
+            toolbar: "#toolbar",
+            toolbarAlign: "right",
+            columns: [{
+                field: 'pic',
+                title: 'Pic',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (pic) {
+                    return '<img src="' + pic + '" width="40" />';
+                }
+            }, {
+                field: 'id',
+                title: '#',
+                align: 'center',
+                valign: 'middle',
+                visible: false
+            }, {
+                field: 'title',
+                title: 'Title',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (title) {
+                    return '<b>' + title + '</b>';
+                }
+            }, {
+                field: 'week',
+                title: 'Weekday',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (week) {
+                    for (let index in week) {
+                        if (week[index] == dayOfWeek[new Date().getDay()]) {
+                            week[index] = '<b color="red">' + week[index] + '</b>';
+                        }
+                    }
+                    return week.join('<br>');
+                }
+            }, {
+                field: 'time',
+                title: 'Time',
+                align: 'center',
+                valign: 'middle',
+                sortable: 'true'
+            }, {
+                field: 'douban',
+                title: 'Douban',
+                align: 'center',
+                formatter: function (db) {
+                    if (db == "")
+                        return "";
+                    return '<a href="' + db + '" target="_blank">' + db.match(/subject\/(\d+)/)[1] + '</a>';
+                },
+                valign: 'middle',
+                class: 'data-inline'
+            }, {
+                field: 'bgm',
+                title: 'Bgm',
+                align: 'center',
+                formatter: function (bgm) {
+                    if (bgm == "")
+                        return "";
+                    return '<a href="' + bgm + '" target="_blank">' + bgm.match(/subject\/(\d+)/)[1] + '</a>';
+                },
+                valign: 'middle',
+                class: 'data-inline'
+            }, {
+                field: 'video',
+                title: 'Video',
+                align: 'left',
+                formatter: function (video) {
+                    if (video == "")
+                        return "";
+                    return '<a href="' + video + '" target="_blank">' + video + '</a>';
+                },
+                valign: 'middle',
+                class: 'data-inline'
+            }, {
+                field: 'operate',
+                title: 'Operate',
+                align: 'center',
+                valign: 'middle',
+                events: window.operateEvents,
+                formatter: function () {
+                    return [
+                        '<a class="edit" href="javascript:void(0)" title="Edit"><i class="fa fa-edit fa-fw"></i></a>',
+                        '<a class="remove" href="javascript:void(0)" title="Delete"><i class="fa fa-trash"></i></a>'
+                    ].join('&nbsp;&nbsp;&nbsp;&nbsp;');
+                }
+            }],
+            pagination: true,
+            sidePagination: "client",
+            pageSize: 50,
+            pageList: [10, 25, 50, 100, 200, "ALL"],
+            escape: true
+        });
+
+        function table_append(data) {
+            $("#table").bootstrapTable('append', {
+                'pic': data.pic,
+                'id': data.id,
+                'title': data.title,
+                'week': data.week,
+                'time': data.time,
+                'douban': data.douban,
+                'bgm': data.bgm,
+                'video': data.video,
+                "operate": ""
+            });
+        }
+
+        $('#new_site').click(function () {
+            let now = new Date().format("hh:mm");
+            $('#my_modal div.modal-body').html([
+                '<form class="form-horizontal" role="form"><div class="form-group"><label for="f_pic" class="col-sm-2 control-label">Pic</label><div class="col-sm-10"><input id="f_pic" type="text" class="form-control"></div></div>',
+                '<div class="form-group"><label for="f_title" class="col-sm-2 control-label">Title</label><div class="col-sm-10"><input id="f_title" type="text" class="form-control"></div></div>',
+                '<div class="form-group"><label for="f_week" class="col-sm-2 control-label">Week</label><div class="col-sm-10"><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Monday">星期一</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Tuesday">星期二</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Wednesday">星期三</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Thursday">星期四</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Friday">星期五</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Saturday">星期六</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Sunday">星期日</label></div></div>',
+                '<div class="form-group"><label for="f_time" class="col-sm-2 control-label">Time</label><div class="col-sm-10"><input id="f_time" type="time" value="' + now + '" class="form-control"></div></div>',
+                '<div class="form-group"><label for="f_douban" class="col-sm-2 control-label">Douban</label><div class="col-sm-10"><input id="f_douban" type="text" class="form-control"></div></div>',
+                '<div class="form-group"><label for="f_bgm" class="col-sm-2 control-label">Bgm</label><div class="col-sm-10"><input id="f_bgm" type="text" class="form-control"></div></div>',
+                '<div class="form-group"><label for="f_video" class="col-sm-2 control-label">Video</label><div class="col-sm-10"><input id="f_video" type="text" class="form-control"></div></div>',
+                '</form>'
+            ].join(''));
+            $('#my_modal h4').text("New Video Info ...");
+            $('#my_modal').modal();
+            $('#btn_submit').unbind('click');
+            $('#btn_submit').click(function () {
+                let data = {};
+                data['pic'] = $("input#f_pic").val().trim();
+                data['title'] = $("input#f_title").val().trim();
+                data['week'] = [];
+                $.each($("input:checkbox:checked"), function () {
+                    data['week'].push($(this).val());
+                })
+                data['time'] = $("input#f_time").val().trim();
+                data['douban'] = $("input#f_douban").val().trim();
+                data['bgm'] = $("input#f_bgm").val().trim();
+                data['video'] = $("input#f_video").val().trim();
+                data['id'] = new Date().getTime();
+
+                $.post('/today/add', {
+                    'data': JSON.stringify(data)
+                }, function (res) {
+                    console.log(res);
+                    $('#my_modal button.close').click();
+                    // if (data['week'].indexOf(dayOfWeek[new Date().getDay()]) >= 0)
+                    table_append(data);
+                });
+            })
+        });
+
+        function get_data() {
+            let weekday = dayOfWeek[new Date().getDay()];
+            $.getJSON('/today/data', function (data) {
+                console.log(data);
+                let index = new Date().getDay();
+                for (let i = index; i < dayOfWeek.length; i++) {
+                    for (let key in data[dayOfWeek[i]]) {
+                        table_append(data[dayOfWeek[i]][key]);
+                    }
+                }
+                for (let i = index - 1; i >= 0; i--) {
+                    for (let key in data[dayOfWeek[i]]) {
+                        table_append(data[dayOfWeek[i]][key]);
+                    }
+                }
+            });
+        }
+
+        $(document).ready(get_data());
+    </script>
+</body>
+
+</html>

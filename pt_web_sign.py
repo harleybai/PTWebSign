@@ -7,45 +7,118 @@ import webbrowser
 from bottle import Bottle, run, error, static_file, request
 
 app = Bottle()
-pt_info = {}
+
+pt_config_path = 'data/pt_config.json'
+today_play_path = 'data/today_play.json'
+pt_config = {}
+today_play = {}
+
+# video
+@app.route('/video', method='GET')
+def video_page():
+    return static_file('video.html', './')
+
+# today
+@app.route('/today', method='GET')
+def today_page():
+    return static_file('todayplay.html', './')
+
+# 所有数据
+@app.route('/today/data', method='GET')
+def today_page_data():
+    global today_play
+    if not today_play:
+        today_play = load_data(today_play_path, 2)
+    return today_play
+
+# 某一天数据
+@app.route('/today/data/<weekday>', method='GET')
+def today_page_week(weekday):
+    global today_play
+    if not today_play:
+        today_play = load_data(today_play_path, 2)
+    if weekday not in today_play.keys():
+        return {}
+    return today_play[weekday]
+
+# 获取播出的哪几天
+@app.route('/today/week/<id>', method='GET')
+def today_page_weekday(id):
+    global today_play
+    weekday = []
+    resCode = 1
+    for key in today_play:
+        if id in today_play[key].keys():
+            weekday.append(key)
+            resCode = 0
+    return {"code": resCode, "msg": "", "data": {'week': weekday}}
 
 
+def today_upsert(t_data):
+    global today_play
+    for week in t_data["week"]:
+        if week not in today_play.keys():
+            today_play[week] = {}
+        today_play[week][t_data["id"]] = {
+            "id": t_data["id"],
+            "pic": t_data["pic"],
+            "title": t_data["title"],
+            "time": t_data["time"],
+            "week": t_data["week"],
+            "douban": t_data["douban"],
+            "bgm": t_data["bgm"],
+            "video": t_data["video"],
+        }
+    save_data(today_play, today_play_path)
+    return {"code": 0, "msg": "oprate play info successfully.", "data": t_data}
+
+# 新增数据
+@app.route('/today/add', method='POST')
+def today_page_add():
+    t_data = json.loads(request.forms.data)
+    return today_upsert(t_data)
+
+# 更新数据
+@app.route('/today/update', method='POST')
+def today_page_update():
+    t_data = json.loads(request.forms.data)
+    t_data['id'] = str(t_data['id'])
+    global today_play
+    for week in today_play:
+        if t_data['id'] in today_play[week].keys():
+            print(t_data['id'])
+            del today_play[week][t_data['id']]
+    return today_upsert(t_data)
+
+# 删除数据
+@app.route('/today/delete/<id>', method='POST')
+def today_page_delete(id):
+    global today_play
+    for week in today_play:
+        if id in today_play[week].keys():
+            del today_play[week][id]
+    save_data(today_play, today_play_path)
+    return {"code": 0, "msg": "delete play info successfully.", "data": {'id': id}}
+
+# index
 @app.route('/', method='GET')
-def index():
+def index_page():
     return static_file('index.html', './')
-
-
-@app.route('/static/<file_type:re:css|js|fonts>/<filename:path>', method='GET')
-def server_static(file_type, filename):
-    return static_file(filename, root='static/' + file_type)
 
 
 @app.route('/data', method='GET')
 def get_data():
-    global pt_info
-    pt_info = load_data()
-    # save_data(data)
-    return pt_info
-
-
-@app.route('/update', method='POST')
-def update_time():
-    global pt_info
-    t_data = json.loads(request.forms.data)
-    for val in t_data:
-        for pt in pt_info["data"]:
-            if int(val["id"]) == pt["id"]:
-                pt["lastdate"] = val["time"]
-                break
-    save_data(pt_info)
-    return {"code": 0, "msg": "update data successfully.", "data": t_data}
+    global pt_config
+    if not pt_config:
+        pt_config = load_data(pt_config_path, 1)
+    return pt_config
 
 
 @app.route('/add', method='GET')
 def add():
-    global pt_info
+    global pt_config
     t_data = {
-        "id": len(pt_info["data"]) + 1,
+        "id": len(pt_config["data"]) + 1,
         "name": request.query.name,
         "url": request.query.url,
         "signin": 0,
@@ -53,15 +126,28 @@ def add():
         "status": True,
         "desc": request.query.desc
     }
-    pt_info["data"].append(t_data)
-    save_data(pt_info)
+    pt_config["data"].append(t_data)
+    save_data(pt_config, pt_config_path)
     return {"code": 0, "msg": "add site successfully.", "data": t_data}
+
+
+@app.route('/update', method='POST')
+def update_time():
+    global pt_config
+    t_data = json.loads(request.forms.data)
+    for val in t_data:
+        for pt in pt_config["data"]:
+            if int(val["id"]) == pt["id"]:
+                pt["lastdate"] = val["time"]
+                break
+    save_data(pt_config, pt_config_path)
+    return {"code": 0, "msg": "update data successfully.", "data": t_data}
 
 
 @app.route('/update/<t_index:int>', method='GET')
 def update_info(t_index):
-    global pt_info
-    for val in pt_info["data"]:
+    global pt_config
+    for val in pt_config["data"]:
         if val["id"] == t_index:
             val["name"] = request.query.name
             val["url"] = request.query.url
@@ -72,30 +158,35 @@ def update_info(t_index):
             val["lastdate"] = request.query.lastdate
             val["desc"] = request.query.desc
             break
-    save_data(pt_info)
+    save_data(pt_config, pt_config_path)
     return {"code": 0, "msg": "update data successfully.", "data": val}
 
 
 @app.route('/update/status/<t_index:int>', method='GET')
 def update_status(t_index):
-    global pt_info
-    for val in pt_info["data"]:
+    global pt_config
+    for val in pt_config["data"]:
         if val["id"] == t_index:
             val["status"] = not val["status"]
             break
-    save_data(pt_info)
+    save_data(pt_config, pt_config_path)
     return {"code": 0, "msg": "update status successfully."}
 
 
 @app.route('/delete/<t_index:int>', method='GET')
 def delete(t_index):
-    global pt_info
-    for val in pt_info["data"]:
+    global pt_config
+    for val in pt_config["data"]:
         if val["id"] == t_index:
             val["delete"] = True
             break
-    save_data(pt_info)
+    save_data(pt_config, pt_config_path)
     return {"code": 0, "msg": "delete successfully."}
+
+# commom
+@app.route('/static/<file_type:re:css|js|fonts>/<filename:path>', method='GET')
+def server_static(file_type, filename):
+    return static_file(filename, root='static/' + file_type)
 
 
 @error(404)
@@ -110,19 +201,20 @@ def get_diff_days(start):
     return str(int(diff_hour / 24)) + "天" + str(int(diff_hour % 24)) + "小时"
 
 
-def load_data():
-    with open('data/data.json', 'r', encoding='UTF-8') as f:
+def load_data(path, config_type):
+    with open(path, 'r', encoding='UTF-8') as f:
         res = json.load(f)
     # 添加字段
     # for i in range(len(res["data"])):
     #     res["data"][i]["desc"] = ""
-    for val in res["data"]:
-        val["pasttime"] = get_diff_days(val["lastdate"])
+    if config_type == 1:
+        for val in res["data"]:
+            val["pasttime"] = get_diff_days(val["lastdate"])
     return res
 
 
-def save_data(info):
-    with open('data/data.json', 'w', encoding='UTF-8') as f:
+def save_data(info, path):
+    with open(path, 'w', encoding='UTF-8') as f:
         json.dump(info, f)
         f.flush()
 
