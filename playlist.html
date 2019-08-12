@@ -69,7 +69,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="/">PT Sign In</a>&nbsp;&nbsp;&nbsp;
-                <a class="navbar-brand" href="#">Today Play</a>&nbsp;&nbsp;&nbsp;
+                <a class="navbar-brand" href="#">Play List</a>&nbsp;&nbsp;&nbsp;
                 <a class="navbar-brand" href="/video">Parse Video Link</a>
             </div>
         </div>
@@ -106,6 +106,7 @@
                 </div>
                 <div class="modal-body"></div>
                 <div class="modal-footer">
+                    <button type="button" id="bgm_auto_fill" class="btn btn-primary">Auto Fill</button>
                     <button type="button" id="btn_submit" class="btn btn-primary">Submit</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
@@ -146,7 +147,7 @@
 
         window.operateEvents = {
             'click .edit': function (e, value, row, index) {
-                $.getJSON('/today/week/' + row['id'], function (res) {
+                $.getJSON('/playlist/weekday/' + row['id'], function (res) {
                     console.log(row['id'], res);
                     if (res.code == 0) {
                         let week = res.data.week;
@@ -154,6 +155,7 @@
                             '<form class="form-horizontal" role="form"><div class="form-group"><label for="f_id" class="col-sm-2 control-label">Id</label><div class="col-sm-10"><input id="f_id" type="text" class="form-control" readonly value="' + row['id'] + '"></div></div>',
                             '<div class="form-group"><label for="f_pic" class="col-sm-2 control-label">Pic</label><div class="col-sm-10"><input id="f_pic" type="text" class="form-control" value="' + row['pic'] + '"></div></div>',
                             '<div class="form-group"><label for="f_title" class="col-sm-2 control-label">Title</label><div class="col-sm-10"><input id="f_title" type="text" class="form-control" value="' + row['title'] + '"></div></div>',
+                            '<div class="form-group"><label for="f_progress" class="col-sm-2 control-label">Progress</label><div class="col-sm-10"><input id="f_progress" type="text" class="form-control" value="' + row['progress'] + '"></div></div>',
                             '<div class="form-group"><label for="f_week" class="col-sm-2 control-label">Week</label><div class="col-sm-10"><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Monday">星期一</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Tuesday">星期二</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Wednesday">星期三</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Thursday">星期四</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Friday">星期五</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Saturday">星期六</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Sunday">星期日</label></div></div>',
                             '<div class="form-group"><label for="f_time" class="col-sm-2 control-label">Time</label><div class="col-sm-10"><input id="f_time" type="time" class="form-control" value="' + row['time'] + '"></div></div>',
                             '<div class="form-group"><label for="f_douban" class="col-sm-2 control-label">Douban</label><div class="col-sm-10"><input id="f_douban" type="text" class="form-control" value="' + row['douban'] + '"></div></div>',
@@ -167,6 +169,7 @@
                                 $(this).attr("checked", 'checked');
                             }
                         });
+                        $('#my_modal h4').text("Update Video Info ...");
                         $('#my_modal').modal();
                         //submit
                         $('#btn_submit').unbind('click');
@@ -174,6 +177,7 @@
                             let data = {};
                             data['pic'] = $("input#f_pic").val().trim();
                             data['title'] = $("input#f_title").val().trim();
+                            data['progress'] = $("input#f_progress").val().trim();
                             data['week'] = [];
                             $.each($("input:checkbox:checked"), function () {
                                 data['week'].push($(this).val());
@@ -184,7 +188,7 @@
                             data['video'] = $("input#f_video").val().trim();
                             data['id'] = row['id'];
 
-                            $.post('/today/update', {
+                            $.post('/playlist/update', {
                                 'data': JSON.stringify(data)
                             }, function (res) {
                                 console.log(res);
@@ -203,7 +207,7 @@
                 });
             },
             'click .remove': function (e, value, row, index) {
-                $.post('/today/delete/' + row['id'], function (res) {
+                $.post('/playlist/delete/' + row['id'], function (res) {
                     if (res.code == 0) {
                         $('#table').bootstrapTable('remove', {
                             field: 'id',
@@ -244,6 +248,21 @@
                 valign: 'middle',
                 formatter: function (title) {
                     return '<b>' + title + '</b>';
+                }
+            }, {
+                field: 'progress',
+                title: 'Progress',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (prg) {
+                    let m = prg.match(/(\d+)\/(\d+)/)
+                    if (m && m.length == 3) {
+                        let progress = parseInt(100 * m[1] / m[2]);
+                        let prg_bar_type = ['progress-bar-success', 'progress-bar-info', 'progress-bar-warning', 'progress-bar-danger'];
+                        let prg_bar_index = parseInt(new Date().format("S")) % 4;
+                        return '<b>' + prg + '</b><br><div class="progress progress-striped" style="height:8px"><div class="progress-bar ' + prg_bar_type[prg_bar_index] + '" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:' + progress + '%;"></div></div>';
+                    }
+                    return '<b>' + prg + '</b>';
                 }
             }, {
                 field: 'week',
@@ -322,6 +341,7 @@
                 'pic': data.pic,
                 'id': data.id,
                 'title': data.title,
+                'progress': data.progress,
                 'week': data.week,
                 'time': data.time,
                 'douban': data.douban,
@@ -336,6 +356,7 @@
             $('#my_modal div.modal-body').html([
                 '<form class="form-horizontal" role="form"><div class="form-group"><label for="f_pic" class="col-sm-2 control-label">Pic</label><div class="col-sm-10"><input id="f_pic" type="text" class="form-control"></div></div>',
                 '<div class="form-group"><label for="f_title" class="col-sm-2 control-label">Title</label><div class="col-sm-10"><input id="f_title" type="text" class="form-control"></div></div>',
+                '<div class="form-group"><label for="f_progress" class="col-sm-2 control-label">Progress</label><div class="col-sm-10"><input id="f_progress" type="text" class="form-control"></div></div>',
                 '<div class="form-group"><label for="f_week" class="col-sm-2 control-label">Week</label><div class="col-sm-10"><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Monday">星期一</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Tuesday">星期二</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Wednesday">星期三</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Thursday">星期四</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Friday">星期五</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Saturday">星期六</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Sunday">星期日</label></div></div>',
                 '<div class="form-group"><label for="f_time" class="col-sm-2 control-label">Time</label><div class="col-sm-10"><input id="f_time" type="time" value="' + now + '" class="form-control"></div></div>',
                 '<div class="form-group"><label for="f_douban" class="col-sm-2 control-label">Douban</label><div class="col-sm-10"><input id="f_douban" type="text" class="form-control"></div></div>',
@@ -350,6 +371,7 @@
                 let data = {};
                 data['pic'] = $("input#f_pic").val().trim();
                 data['title'] = $("input#f_title").val().trim();
+                data['progress'] = $("input#f_progress").val().trim();
                 data['week'] = [];
                 $.each($("input:checkbox:checked"), function () {
                     data['week'].push($(this).val());
@@ -360,7 +382,7 @@
                 data['video'] = $("input#f_video").val().trim();
                 data['id'] = new Date().getTime();
 
-                $.post('/today/add', {
+                $.post('/playlist/add', {
                     'data': JSON.stringify(data)
                 }, function (res) {
                     console.log(res);
@@ -373,7 +395,7 @@
 
         function get_data() {
             let weekday = dayOfWeek[new Date().getDay()];
-            $.getJSON('/today/data', function (data) {
+            $.getJSON('/playlist/data', function (data) {
                 console.log(data);
                 let index = new Date().getDay();
                 for (let i = index; i < dayOfWeek.length; i++) {
@@ -381,7 +403,7 @@
                         table_append(data[dayOfWeek[i]][key]);
                     }
                 }
-                for (let i = index - 1; i >= 0; i--) {
+                for (let i = 0; i < index; i++) {
                     for (let key in data[dayOfWeek[i]]) {
                         table_append(data[dayOfWeek[i]][key]);
                     }

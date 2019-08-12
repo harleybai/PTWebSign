@@ -9,95 +9,85 @@ from bottle import Bottle, run, error, static_file, request
 app = Bottle()
 
 pt_config_path = 'data/pt_config.json'
-today_play_path = 'data/today_play.json'
+playlist_config_path = 'data/playlist_config.json'
 pt_config = {}
-today_play = {}
+playlist_config = {}
 
 # video
 @app.route('/video', method='GET')
 def video_page():
     return static_file('video.html', './')
 
-# today
-@app.route('/today', method='GET')
-def today_page():
-    return static_file('todayplay.html', './')
+# playlist
+@app.route('/playlist', method='GET')
+def playlist_page():
+    return static_file('playlist.html', './')
 
 # 所有数据
-@app.route('/today/data', method='GET')
-def today_page_data():
-    global today_play
-    if not today_play:
-        today_play = load_data(today_play_path, 2)
-    return today_play
+@app.route('/playlist/data', method='GET')
+def playlist_data():
+    global playlist_config
+    if not playlist_config:
+        playlist_config = load_data(playlist_config_path, 2)
+    return playlist_config
 
 # 某一天数据
-@app.route('/today/data/<weekday>', method='GET')
-def today_page_week(weekday):
-    global today_play
-    if not today_play:
-        today_play = load_data(today_play_path, 2)
-    if weekday not in today_play.keys():
+@app.route('/playlist/data/<weekday>', method='GET')
+def playlist_page_week(weekday):
+    global playlist_config
+    if not playlist_config:
+        playlist_config = load_data(playlist_config_path, 2)
+    if weekday not in playlist_config.keys():
         return {}
-    return today_play[weekday]
+    return playlist_config[weekday]
 
 # 获取播出的哪几天
-@app.route('/today/week/<id>', method='GET')
-def today_page_weekday(id):
-    global today_play
+@app.route('/playlist/weekday/<id>', method='GET')
+def playlist_page_weekday(id):
+    global playlist_config
     weekday = []
     resCode = 1
-    for key in today_play:
-        if id in today_play[key].keys():
+    for key in playlist_config:
+        if id in playlist_config[key].keys():
             weekday.append(key)
             resCode = 0
     return {"code": resCode, "msg": "", "data": {'week': weekday}}
 
 
-def today_upsert(t_data):
-    global today_play
+def playlist_upsert(t_data):
+    global playlist_config
     for week in t_data["week"]:
-        if week not in today_play.keys():
-            today_play[week] = {}
-        today_play[week][t_data["id"]] = {
-            "id": t_data["id"],
-            "pic": t_data["pic"],
-            "title": t_data["title"],
-            "time": t_data["time"],
-            "week": t_data["week"],
-            "douban": t_data["douban"],
-            "bgm": t_data["bgm"],
-            "video": t_data["video"],
-        }
-    save_data(today_play, today_play_path)
+        if week not in playlist_config.keys():
+            playlist_config[week] = {}
+        playlist_config[week][t_data["id"]] = t_data
+    save_data(playlist_config, playlist_config_path)
     return {"code": 0, "msg": "oprate play info successfully.", "data": t_data}
 
 # 新增数据
-@app.route('/today/add', method='POST')
-def today_page_add():
+@app.route('/playlist/add', method='POST')
+def playlist_page_add():
     t_data = json.loads(request.forms.data)
-    return today_upsert(t_data)
+    return playlist_upsert(t_data)
 
 # 更新数据
-@app.route('/today/update', method='POST')
-def today_page_update():
+@app.route('/playlist/update', method='POST')
+def playlist_page_update():
     t_data = json.loads(request.forms.data)
     t_data['id'] = str(t_data['id'])
-    global today_play
-    for week in today_play:
-        if t_data['id'] in today_play[week].keys():
-            print(t_data['id'])
-            del today_play[week][t_data['id']]
-    return today_upsert(t_data)
+    global playlist_config
+    for week in playlist_config:
+        if t_data['id'] in playlist_config[week].keys():
+            del playlist_config[week][t_data['id']]
+    return playlist_upsert(t_data)
 
 # 删除数据
-@app.route('/today/delete/<id>', method='POST')
-def today_page_delete(id):
-    global today_play
-    for week in today_play:
-        if id in today_play[week].keys():
-            del today_play[week][id]
-    save_data(today_play, today_play_path)
+@app.route('/playlist/delete/<id>', method='POST')
+def playlist_page_delete(id):
+    global playlist_config
+    for week in playlist_config:
+        if id in playlist_config[week].keys():
+            del playlist_config[week][id]
+    save_data(playlist_config, playlist_config_path)
     return {"code": 0, "msg": "delete play info successfully.", "data": {'id': id}}
 
 # index
