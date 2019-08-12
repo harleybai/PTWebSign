@@ -272,7 +272,7 @@
                 formatter: function (week) {
                     for (let index in week) {
                         if (week[index] == dayOfWeek[new Date().getDay()]) {
-                            week[index] = '<b color="red">' + week[index] + '</b>';
+                            week[index] = '<font color="red"><b>' + week[index] + '</b></font>';
                         }
                     }
                     return week.join('<br>');
