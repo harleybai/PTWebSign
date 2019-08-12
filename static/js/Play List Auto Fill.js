@@ -44,7 +44,7 @@
 			// 放送星期
 			let weekday = page.find("ul#infobox>li:contains('放送星期')").text().trim().match(/星期.$/)[0];
 			// 总集数
-			let progress_total = page.find("ul.prg_list a.load-epinfo:last").text();
+			let progress_total = parseInt(page.find("ul.prg_list a.load-epinfo:last").text());
 
 			console.log(`标题: ${title}, 海报: ${img}, 放送星期: ${weekday}, 总集数: ${progress_total}`);
 			// 填写
