@@ -48,7 +48,7 @@ def playlist_page_weekday(id):
     weekday = []
     resCode = 1
     for key in playlist_config:
-        if id in playlist_config[key].keys():
+        if str(id) in playlist_config[key].keys():
             weekday.append(key)
             resCode = 0
     return {"code": resCode, "msg": "", "data": {'week': weekday}}
