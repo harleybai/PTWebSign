@@ -26,7 +26,7 @@ def playlist_page():
 # 所有数据
 @app.route('/playlist/data', method='GET')
 def playlist_data():
-    global playlist_config
+    global playlist_config, playlist_config_path
     if not playlist_config:
         playlist_config = load_data(playlist_config_path, 2)
     return playlist_config
@@ -34,7 +34,7 @@ def playlist_data():
 # 某一天数据
 @app.route('/playlist/data/<weekday>', method='GET')
 def playlist_page_week(weekday):
-    global playlist_config
+    global playlist_config, playlist_config_path
     if not playlist_config:
         playlist_config = load_data(playlist_config_path, 2)
     if weekday not in playlist_config.keys():
@@ -55,11 +55,17 @@ def playlist_page_weekday(id):
 
 
 def playlist_upsert(t_data):
-    global playlist_config
-    for week in t_data["week"]:
-        if week not in playlist_config.keys():
-            playlist_config[week] = {}
-        playlist_config[week][t_data["id"]] = t_data
+    global playlist_config, playlist_config_path
+    if t_data["time"] != "--":
+        for week in t_data["week"]:
+            if week not in playlist_config.keys():
+                playlist_config[week] = {}
+            playlist_config[week][str(t_data['id'])] = t_data
+    else:
+        if "movie" not in playlist_config.keys():
+            playlist_config['movie'] = {}
+        playlist_config['movie'][str(t_data['id'])] = t_data
+
     save_data(playlist_config, playlist_config_path)
     return {"code": 0, "msg": "oprate play info successfully.", "data": t_data}
 
@@ -73,17 +79,19 @@ def playlist_page_add():
 @app.route('/playlist/update', method='POST')
 def playlist_page_update():
     t_data = json.loads(request.forms.data)
-    t_data['id'] = str(t_data['id'])
     global playlist_config
     for week in playlist_config:
-        if t_data['id'] in playlist_config[week].keys():
-            del playlist_config[week][t_data['id']]
+        if str(t_data['id']) in playlist_config[week].keys():
+            del playlist_config[week][str(t_data['id'])]
+    if "movie" in playlist_config.keys():
+        if str(t_data['id']) in playlist_config['movie'].keys():
+            del playlist_config['movie'][str(t_data['id'])]
     return playlist_upsert(t_data)
 
 # 删除数据
 @app.route('/playlist/delete/<id>', method='POST')
 def playlist_page_delete(id):
-    global playlist_config
+    global playlist_config, playlist_config_path
     for week in playlist_config:
         if id in playlist_config[week].keys():
             del playlist_config[week][id]
@@ -98,15 +106,15 @@ def index_page():
 
 @app.route('/data', method='GET')
 def get_data():
-    global pt_config
-    if not pt_config:
-        pt_config = load_data(pt_config_path, 1)
+    global pt_config, pt_config_path
+    # if not pt_config:
+    pt_config = load_data(pt_config_path, 1)
     return pt_config
 
 
 @app.route('/add', method='GET')
 def add():
-    global pt_config
+    global pt_config, pt_config_path
     t_data = {
         "id": len(pt_config["data"]) + 1,
         "name": request.query.name,
@@ -123,7 +131,7 @@ def add():
 
 @app.route('/update', method='POST')
 def update_time():
-    global pt_config
+    global pt_config, pt_config_path
     t_data = json.loads(request.forms.data)
     for val in t_data:
         for pt in pt_config["data"]:
@@ -136,7 +144,7 @@ def update_time():
 
 @app.route('/update/<t_index:int>', method='GET')
 def update_info(t_index):
-    global pt_config
+    global pt_config, pt_config_path
     for val in pt_config["data"]:
         if val["id"] == t_index:
             val["name"] = request.query.name
@@ -154,7 +162,7 @@ def update_info(t_index):
 
 @app.route('/update/status/<t_index:int>', method='GET')
 def update_status(t_index):
-    global pt_config
+    global pt_config, pt_config_path
     for val in pt_config["data"]:
         if val["id"] == t_index:
             val["status"] = not val["status"]
@@ -165,7 +173,7 @@ def update_status(t_index):
 
 @app.route('/delete/<t_index:int>', method='GET')
 def delete(t_index):
-    global pt_config
+    global pt_config, pt_config_path
     for val in pt_config["data"]:
         if val["id"] == t_index:
             val["delete"] = True
@@ -210,5 +218,5 @@ def save_data(info, path):
 
 
 if __name__ == "__main__":
-    webbrowser.open_new_tab('http://127.0.0.1:8080')
+    # webbrowser.open_new_tab('http://127.0.0.1:8080')
     run(app, host='localhost', port=8080)
