@@ -194,27 +194,30 @@
             //submit
             $('#btn_submit').unbind('click');
             $('#btn_submit').click(function () {
-                let data = {};
-                data['pic'] = $("input#f_pic").val().trim();
-                data['title'] = $("input#f_title").val().trim();
-                data['progress'] = $("input#f_progress").val().trim();
-                data['week'] = [];
+                info.pic = $("input#f_pic").val().trim();
+                info.title = $("input#f_title").val().trim();
+                info.progress = $("input#f_progress").val().trim();
+                info.week = [];
                 $.each($("input:checkbox:checked"), function () {
-                    data['week'].push($(this).val());
+                    info.week.push($(this).val());
                 });
-                data['week'] = data['week'].join(",");
-                data['date'] = info.type === 0 ? $("input#f_date").val().trim() : "";
-                data['time'] = info.type === 0 ? "" : $("input#f_time").val().trim();
-                data['douban'] = $("input#f_douban").val().trim();
-                data['bgm'] = $("input#f_bgm").val().trim();
-                data['video'] = $("input#f_video").val().trim();
-                data['id'] = row['id'];
-
-                $.post('/play/update', data, function (res) {
+                info.week = info.week.join(",");
+                info.date = info.type === 0 ? $("input#f_date").val().trim() : "";
+                info.time = info.type === 0 ? "" : $("input#f_time").val().trim();
+                info.douban = $("input#f_douban").val().trim();
+                info.bgm = $("input#f_bgm").val().trim();
+                info.video = $("input#f_video").val().trim();
+                info.id = row['id'];
+                $.post('/play/update', info, function (res) {
                     console.log(res);
                     if (res.code === 0) {
-                        window.location.reload();
+                        $('#table').bootstrapTable('remove', {
+                            field: 'id',
+                            values: [row['id']]
+                        });
+                        format_append([info]);
                     }
+                    $('#my_modal button.close').click();
                 });
             })
         },
@@ -359,6 +362,45 @@
         escape: true
     });
 
+    function format_append(data) {
+        let d = {
+            "Sunday": [],
+            "Monday": [],
+            "Tuesday": [],
+            "Wednesday": [],
+            "Thursday": [],
+            "Friday": [],
+            "Saturday": []
+        };
+        let m = [];
+        for (let key in data) {
+            if (data[key]['type'] === 0) {
+                m.push(data[key])
+            } else if (data[key]['type'] === 1 && data[key]['week'] !== "") {
+                let week = data[key]['week'].split(',');
+                for (let w in week) {
+                    let {...temp} = data[key];
+                    temp['week'] = week[w];
+                    d[week[w]].push(temp)
+                }
+            }
+        }
+        let index = new Date().getDay();
+        for (let i = index; i < dayOfWeek.length; i++) {
+            for (let key in d[dayOfWeek[i]]) {
+                table_append(d[dayOfWeek[i]][key], dayOfWeek[i]);
+            }
+        }
+        for (let i = 0; i < index; i++) {
+            for (let key in d[dayOfWeek[i]]) {
+                table_append(d[dayOfWeek[i]][key], dayOfWeek[i]);
+            }
+        }
+        for (let k in m) {
+            table_append(m[k]);
+        }
+    }
+
     function table_append(data, next_weekday = '') {
         if (data.time !== '' && next_weekday !== '') {
             let dayOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -383,7 +425,6 @@
 
     $('#new_site').click(function () {
         let now = new Date().format("hh:mm");
-        let date = new Date().format("yyyy-MM-dd");
         $('#my_modal div.modal-body').html([
             '<form class="form-horizontal" role="form"><div class="form-group"><label for="f_pic" class="col-sm-2 control-label">Pic</label><div class="col-sm-10"><input id="f_pic" type="text" class="form-control"></div></div>',
             '<div class="form-group"><label for="f_title" class="col-sm-2 control-label">Title</label><div class="col-sm-10"><input id="f_title" type="text" class="form-control"></div></div>',
@@ -402,26 +443,27 @@
         $('#btn_submit').unbind('click');
         $('#btn_submit').click(function () {
             let data = {};
-            data['pic'] = $("input#f_pic").val().trim();
-            data['title'] = $("input#f_title").val().trim();
-            data['type'] = parseInt($("input[name='f_type']:checked").val());
-            data['progress'] = $("input#f_progress").val().trim();
-            data['week'] = [];
+            data.pic = $("input#f_pic").val().trim();
+            data.title = $("input#f_title").val().trim();
+            data.type = parseInt($("input[name='f_type']:checked").val());
+            data.progress = $("input#f_progress").val().trim();
+            data.week = [];
             $.each($("input:checkbox:checked"), function () {
-                data['week'].push($(this).val());
+                data.week.push($(this).val());
             });
-            data['week'] = data['week'].join(",");
-            data['date'] = $("input#f_date").val().trim();
-            data['time'] = data['type'] === 0 ? "" : $("input#f_time").val().trim();
-            data['douban'] = $("input#f_douban").val().trim();
-            data['bgm'] = $("input#f_bgm").val().trim();
-            data['video'] = $("input#f_video").val().trim();
+            data.week = data.week.join(",");
+            data.date = $("input#f_date").val().trim();
+            data.time = data.type === 0 ? "" : $("input#f_time").val().trim();
+            data.douban = $("input#f_douban").val().trim();
+            data.bgm = $("input#f_bgm").val().trim();
+            data.video = $("input#f_video").val().trim();
             $.post('/play/add', {
                 'data': JSON.stringify(data)
             }, function (res) {
                 console.log(res);
                 $('#my_modal button.close').click();
                 table_append(data);
+                //window.location.reload();
             });
         });
     });
@@ -429,42 +471,7 @@
     function get_data() {
         $.getJSON('/play/data', function (data) {
             console.log(data);
-            let d = {
-                "Sunday": [],
-                "Monday": [],
-                "Tuesday": [],
-                "Wednesday": [],
-                "Thursday": [],
-                "Friday": [],
-                "Saturday": []
-            };
-            let m = [];
-            for (let key in data['data']) {
-                if (data['data'][key]['type'] === 0) {
-                    m.push(data['data'][key])
-                } else if (data['data'][key]['type'] === 1 && data['data'][key]['week'] !== "") {
-                    let week = data['data'][key]['week'].split(',');
-                    for (let w in week) {
-                        let {...temp} = data['data'][key];
-                        temp['week'] = week[w];
-                        d[week[w]].push(temp)
-                    }
-                }
-            }
-            let index = new Date().getDay();
-            for (let i = index; i < dayOfWeek.length; i++) {
-                for (let key in d[dayOfWeek[i]]) {
-                    table_append(d[dayOfWeek[i]][key], dayOfWeek[i]);
-                }
-            }
-            for (let i = 0; i < index; i++) {
-                for (let key in d[dayOfWeek[i]]) {
-                    table_append(d[dayOfWeek[i]][key], dayOfWeek[i]);
-                }
-            }
-            for (let k in m) {
-                table_append(m[k]);
-            }
+            format_append(data.data);
         });
     }
 
