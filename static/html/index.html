@@ -382,7 +382,7 @@
 
     function get_data() {
         $.getJSON('/pt/data', function (data) {
-            max_days = parseInt(data['maxdays']);
+            max_days = parseInt(data['max_days']);
             for (let index in data['data']) {
                 if (!data['data'][index].status) {
                     status_false_site.push(data['data'][index]);
