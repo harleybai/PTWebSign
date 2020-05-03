@@ -109,12 +109,16 @@
         if (input.match(/^mtopjsonp1/)) {
             input = input.replace(/\s*mtopjsonp1\(/, '').replace(/\)\s*$/, '');
             let jsonInput = JSON.parse(input);
+            let title = jsonInput.data.data.show.title;
+            let subtitle = jsonInput.data.data.video.title;
             let videoInfo = jsonInput.data.data.stream;
             for (let i = 0; i < videoInfo.length; i++) {
                 let width = videoInfo[i].width;
+                let height = videoInfo[i].height;
                 if (width == 1920) {
-                    $('div#div_info').html('<div class="alert alert-success">成功, Width = ' + width + '</div>');
+                    $('div#div_info').html('<div class="alert alert-success">成功, ' + title + '>' + subtitle + '( ' + width + ' x ' + height + ' )</div>');
                     $("#linktext").val(videoInfo[i].m3u8_url);
+                    break;
                 }
             }
         } else {
@@ -122,8 +126,9 @@
             let videoInfo = JSON.parse(jsonInput.vinfo);
             let link = videoInfo.vl.vi[0].ul.ui[0].url;
             let title = videoInfo.vl.vi[0].ti;
-            let width = videoInfo.vl.vi[0].vh;
-            $('div#div_info').html('<div class="alert alert-success">成功, Title = ' + title + ', Width = ' + width + '</div>');
+            let width = videoInfo.vl.vi[0].vw;
+            let height = videoInfo.vl.vi[0].vh;
+            $('div#div_info').html('<div class="alert alert-success">成功, Title = ' + title + '( ' + width + ' x ' + height + ' )</div>');
             $("#linktext").val(link);
         }
         $('.btn-clipboard').click();

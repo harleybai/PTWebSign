@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import json
 import sqlite3
 import time
+from shutil import copyfile
 
 conn = sqlite3.connect('data/video.db')
 
@@ -146,6 +146,14 @@ def format_play(data):
             "video": row[10]
         })
     return res
+
+
+def backup_db():
+    try:
+        copyfile('data/video.db', 'data/video_backup.db')
+    except IOError as e:
+        return [1, "Unable to copy file. %s" % e]
+    return [0, "ok"]
 
 
 if __name__ == "__main__":

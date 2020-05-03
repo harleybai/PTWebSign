@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 import json
 import model
+import os
+import time
+from urllib.request import urlretrieve
 
 from bottle import Bottle, run, error, static_file, request
 
@@ -50,6 +53,7 @@ def play_add():
     for k in keys:
         if k not in t_data:
             return {"code": 1, "msg": "add play info failed.", "data": t_data}
+    t_data['pic'] = img_download_play_list(t_data['pic'], time.strftime("%Y%m%d_%H%M%S", time.localtime()))
     model.create_play(t_data)
     return {"code": 0, "msg": "add paly info successfully.", "data": t_data}
 
@@ -67,10 +71,15 @@ def playlist_page_update():
     t_douban = request.forms.douban
     t_bgm = request.forms.bgm
     t_video = request.forms.video
+    # 下载图片更新链接
+    data = model.get_play_by_id(t_id)
+    t_pic = img_download_play_list(t_pic, data[0]['pic'].split('/')[-1].split('.')[0])
     sql = "UPDATE t_play SET pic = '%s', title = '%s', progress = '%s', week = '%s', date = '%s', time = '%s', douban = '%s', bgm = '%s', video = '%s' where id = %d" % (
         t_pic, t_title, t_progress, t_week, t_date, t_time, t_douban, t_bgm, t_video, t_id)
-    model.exec_sql(sql)
-    return {"code": 0, "msg": "update play info successfully."}
+    if t_id > 0:
+        model.exec_sql(sql)
+        return {"code": 0, "msg": "update play info successfully."}
+    return {"code": 1, "msg": "update play info error."}
 
 
 # play delete
@@ -79,6 +88,13 @@ def play_delete():
     t_id = int(request.query.id)
     model.delete_play_by_id(t_id)
     return {"code": 0, "msg": "delete play info successfully.", "data": {'id': t_id}}
+
+
+# db backup
+@app.route('/play/backup', method='GET')
+def backup_db():
+    res = model.backup_db()
+    return {"code": res[0], "msg": res[1], "data": {}}
 
 
 @app.route('/pt/data', method='GET')
@@ -143,9 +159,31 @@ def server_static(file_type, filename):
     return static_file(filename, root='static/' + file_type)
 
 
+@app.route('/public/<file_type:re:img>/<filename:path>', method='GET')
+def server_public(file_type, filename):
+    return static_file(filename, root='public/' + file_type)
+
+
 @error(404)
 def error404():
     return 'Nothing here, sorry'
+
+
+def img_download_play_list(url, file_name):
+    # 不是外部图片，则不下载
+    if not url.startswith('http'):
+        return url
+    img_type = url.split('/')[-1].split('.')[-1]
+    if img_type not in ['jpg', 'img', 'png', 'webp', 'jiff', 'gif']:
+        img_type = 'jpg'
+    img_download(url, 'public/img/' + file_name + '.' + img_type)
+    return '/public/img/' + file_name + '.' + img_type
+
+
+def img_download(url, path):
+    if os.path.exists(path):
+        os.remove(path)
+    urlretrieve(url, path)
 
 
 if __name__ == "__main__":

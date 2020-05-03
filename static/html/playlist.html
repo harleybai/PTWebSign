@@ -78,9 +78,14 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-8 col-sm-offset-2 col-md-10 col-md-offset-1 main">
+            <div id="div_info">
+            </div>
             <div id="toolbar" class="form-inline">
                 <button type="button" id="new_site" class="btn btn-primary"><i class="fa fa-plus-square-o"></i> New
                     Video Info
+                </button>
+                <button type="button" id="back_up" class="btn btn-primary"><i class="fa fa-clone"
+                                                                              aria-hidden="true"></i> Db Backup
                 </button>
             </div>
             <div class="table-responsive">
@@ -158,11 +163,11 @@
             $('#my_modal div.modal-body').html([
                 '<form class="form-horizontal" role="form"><div class="form-group"><label for="f_id" class="col-sm-2 control-label">Id</label><div class="col-sm-10"><input id="f_id" type="text" class="form-control" readonly value="' + row['id'] + '"></div></div>',
                 '<div class="form-group"><label for="f_pic" class="col-sm-2 control-label">Pic</label><div class="col-sm-10"><input id="f_pic" type="text" class="form-control" value="' + row['pic'] + '"></div></div>',
-                '<div class="form-group"><label for="f_title" class="col-sm-2 control-label">Title</label><div class="col-sm-10"><input id="f_title" type="text" class="form-control" value="' + row['title'] + '"></div></div>',
+                '<div class="form-group" id="d_title"><label for="f_title" class="col-sm-2 control-label">Title</label><div class="col-sm-10"><input id="f_title" type="text" class="form-control" value="' + row['title'] + '"></div></div>',
                 '<div class="form-inline"><label for="f_progress" class="col-sm-2 control-label">Progress</label><input id="f_progress" type="text" class="form-control" value="' + row['progress'] + '"><button id="p_add" class="btn btn-default" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button></div>',
-                '<div class="form-group"><label for="f_week" class="col-sm-2 control-label">Week</label><div class="col-sm-10"><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Monday">星期一</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Tuesday">星期二</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Wednesday">星期三</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Thursday">星期四</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Friday">星期五</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Saturday">星期六</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Sunday">星期日</label></div></div>',
-                '<div class="form-group"><label for="f_date" class="col-sm-2 control-label">Date</label><div class="col-sm-10"><input id="f_date" type="date" class="form-control" value="' + row['date'] + '"></div></div>',
-                '<div class="form-group"><label for="f_time" class="col-sm-2 control-label">Time</label><div class="col-sm-10"><input id="f_time" type="time" class="form-control" value="' + row['time'] + '"></div></div>',
+                '<div class="form-group" id="d_week"><label for="f_week" class="col-sm-2 control-label">Week</label><div class="col-sm-10"><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Monday">星期一</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Tuesday">星期二</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Wednesday">星期三</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Thursday">星期四</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Friday">星期五</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Saturday">星期六</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Sunday">星期日</label></div></div>',
+                '<div class="form-group" id="d_date"><label for="f_date" class="col-sm-2 control-label">Date</label><div class="col-sm-10"><input id="f_date" type="date" class="form-control" value="' + row['date'] + '"></div></div>',
+                '<div class="form-group" id="d_time"><label for="f_time" class="col-sm-2 control-label">Time</label><div class="col-sm-10"><input id="f_time" type="time" class="form-control" value="' + row['time'] + '"></div></div>',
                 '<div class="form-group"><label for="f_douban" class="col-sm-2 control-label">Douban</label><div class="col-sm-10"><input id="f_douban" type="text" class="form-control" value="' + row['douban'] + '"></div></div>',
                 '<div class="form-group"><label for="f_bgm" class="col-sm-2 control-label">Bgm</label><div class="col-sm-10"><input id="f_bgm" type="text" class="form-control" value="' + row['bgm'] + '"></div></div>',
                 '<div class="form-group"><label for="f_video" class="col-sm-2 control-label">Video</label><div class="col-sm-10"><input id="f_video" type="text" class="form-control" value="' + row['video'] + '"></div></div>',
@@ -180,8 +185,13 @@
             $.getJSON('/play/info?id=' + row['id'], function (res) {
                 if (res.code === 0) {
                     info = res.data;
-                    if (res.data.type === 1) {
-                        $("input#f_date").val("");
+                    if (res.data.type === 0) {//电影
+                        $('#my_modal #d_title').after('<div class="form-group"><label for="f_type" class="col-sm-2 control-label">Type</label><div class="col-sm-10"><input id="f_type" type="text" class="form-control" readonly value="电影"></div></div>');
+                        $('#my_modal #d_week').hide();
+                        $('#my_modal #d_time').hide();
+                    } else if (res.data.type === 1) {//动漫/电视剧
+                        $('#my_modal #d_title').after('<div class="form-group"><label for="f_type" class="col-sm-2 control-label">Type</label><div class="col-sm-10"><input id="f_type" type="text" class="form-control" readonly value="动漫/电视剧"></div></div>');
+                        $('#my_modal #d_date').hide();
                         if (res.data.week !== "") {
                             let week = res.data.week.split(",");
                             $("input:checkbox").each(function () {
@@ -206,7 +216,7 @@
                 info.title = $("input#f_title").val().trim();
                 info.progress = $("input#f_progress").val().trim();
                 info.week = [];
-                $.each($("input:checkbox:checked"), function () {
+                info.type === 1 && $.each($("input:checkbox:checked"), function () {
                     info.week.push($(this).val());
                 });
                 info.week = info.week.join(",");
@@ -218,6 +228,7 @@
                 info.id = row['id'];
                 $.post('/play/update', info, function (res) {
                     console.log(res);
+                    new_message(res.code, res.msg);
                     if (res.code === 0) {
                         $('#table').bootstrapTable('remove', {
                             field: 'id',
@@ -237,6 +248,7 @@
                         values: [row['id']]
                     });
                 }
+                new_message(res.code, res.msg);
                 console.log(res);
             });
         }
@@ -322,9 +334,11 @@
             title: 'Douban',
             align: 'center',
             formatter: function (db) {
-                if (db === "")
-                    return "";
-                return '<a href="' + db + '" target="_blank">' + db.match(/subject\/(\d+)/)[1] + '</a>';
+                let m = db.match(/subject\/(\d+)/);
+                if (m) {
+                    return '<a href="' + db + '" target="_blank">' + m[1] + '</a>';
+                }
+                return db;
             },
             valign: 'middle',
             class: 'data-inline'
@@ -333,9 +347,11 @@
             title: 'Bgm',
             align: 'center',
             formatter: function (bgm) {
-                if (bgm === "")
-                    return "";
-                return '<a href="' + bgm + '" target="_blank">' + bgm.match(/subject\/(\d+)/)[1] + '</a>';
+                let m = bgm.match(/subject\/(\d+)/);
+                if (m) {
+                    return '<a href="' + bgm + '" target="_blank">' + m[1] + '</a>';
+                }
+                return bgm;
             },
             valign: 'middle',
             class: 'data-inline'
@@ -431,16 +447,37 @@
         });
     }
 
+    let msg_timeout;
+
+    function new_message(code, msg) {
+        clearTimeout(msg_timeout);
+        if (code == 0) {
+            $('div#div_info').html('<div class="alert alert-success">' + msg + '</div>');
+        } else {
+            $('div#div_info').html('<div class="alert alert-error">' + msg + '</div>');
+        }
+        msg_timeout = setTimeout(function () {
+            $('div#div_info').html('');
+        }, 2000);
+    }
+
+    $('#back_up').click(function () {
+        $.getJSON('/play/backup', function (data) {
+            console.log(data);
+            new_message(data.code, data.msg);
+        });
+    });
+
     $('#new_site').click(function () {
         let now = new Date().format("hh:mm");
         $('#my_modal div.modal-body').html([
             '<form class="form-horizontal" role="form"><div class="form-group"><label for="f_pic" class="col-sm-2 control-label">Pic</label><div class="col-sm-10"><input id="f_pic" type="text" class="form-control"></div></div>',
             '<div class="form-group"><label for="f_title" class="col-sm-2 control-label">Title</label><div class="col-sm-10"><input id="f_title" type="text" class="form-control"></div></div>',
             '<div class="form-group"><label for="f_type" class="col-sm-2 control-label">Type</label><div class="col-sm-10"><label class="radio-inline"><input name="f_type" type="radio" value="0">电影</label><label class="radio-inline"><input name="f_type" type="radio" value="1" checked>动漫/电视剧</label></div></div>',
-            '<div class="form-group"><label for="f_progress" class="col-sm-2 control-label">Progress</label><div class="col-sm-10"><input id="f_progress" type="text" class="form-control"></div></div>',
-            '<div class="form-group"><label for="f_week" class="col-sm-2 control-label">Week</label><div class="col-sm-10"><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Monday">星期一</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Tuesday">星期二</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Wednesday">星期三</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Thursday">星期四</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Friday">星期五</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Saturday">星期六</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Sunday">星期日</label></div></div>',
-            '<div class="form-group"><label for="f_date" class="col-sm-2 control-label">Date</label><div class="col-sm-10"><input id="f_date" type="date" value="" class="form-control"></div></div>',
-            '<div class="form-group"><label for="f_time" class="col-sm-2 control-label">Time</label><div class="col-sm-10"><input id="f_time" type="time" value="' + now + '" class="form-control"></div></div>',
+            '<div class="form-group"><label for="f_progress" class="col-sm-2 control-label">Progress</label><div class="col-sm-10"><input id="f_progress" type="text" class="form-control" value="0/12"></div></div>',
+            '<div class="form-group" id="d_week"><label for="f_week" class="col-sm-2 control-label">Week</label><div class="col-sm-10"><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Monday">星期一</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Tuesday">星期二</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Wednesday">星期三</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Thursday">星期四</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Friday">星期五</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Saturday">星期六</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Sunday">星期日</label></div></div>',
+            '<div class="form-group" hidden id="d_date"><label for="f_date" class="col-sm-2 control-label">Date</label><div class="col-sm-10"><input id="f_date" type="date" value="" class="form-control"></div></div>',
+            '<div class="form-group" id="d_time"><label for="f_time" class="col-sm-2 control-label">Time</label><div class="col-sm-10"><input id="f_time" type="time" value="' + now + '" class="form-control"></div></div>',
             '<div class="form-group"><label for="f_douban" class="col-sm-2 control-label">Douban</label><div class="col-sm-10"><input id="f_douban" type="text" class="form-control"></div></div>',
             '<div class="form-group"><label for="f_bgm" class="col-sm-2 control-label">Bgm</label><div class="col-sm-10"><input id="f_bgm" type="text" class="form-control"></div></div>',
             '<div class="form-group"><label for="f_video" class="col-sm-2 control-label">Video</label><div class="col-sm-10"><input id="f_video" type="text" class="form-control"></div></div>',
@@ -448,6 +485,20 @@
         ].join(''));
         $('#my_modal h4').text("New Video Info ...");
         $('#my_modal').modal();
+        $("#my_modal input[name='f_type']").change(function () {
+            let type = parseInt($("input[name='f_type']:checked").val());
+            if (type === 0) {//电影
+                $('#my_modal #f_progress').val("0/1");
+                $('#my_modal #d_date').show();
+                $('#my_modal #d_week').hide();
+                $('#my_modal #d_time').hide();
+            } else if (type === 1) {//动漫/电视剧
+                $('#my_modal #f_progress').val("0/12");
+                $('#my_modal #d_date').hide();
+                $('#my_modal #d_week').show();
+                $('#my_modal #d_time').show();
+            }
+        });
         $('#btn_submit').unbind('click');
         $('#btn_submit').click(function () {
             let data = {};
@@ -456,12 +507,13 @@
             data.type = parseInt($("input[name='f_type']:checked").val());
             data.progress = $("input#f_progress").val().trim();
             data.week = [];
-            $.each($("input:checkbox:checked"), function () {
+            data.type === 1 && $.each($("input:checkbox:checked"), function () {
                 data.week.push($(this).val());
             });
             data.week = data.week.join(",");
-            data.date = $("input#f_date").val().trim();
+            data.date = data.type === 0 ? $("input#f_date").val().trim() : "";
             data.time = data.type === 0 ? "" : $("input#f_time").val().trim();
+
             data.douban = $("input#f_douban").val().trim();
             data.bgm = $("input#f_bgm").val().trim();
             data.video = $("input#f_video").val().trim();
@@ -469,6 +521,7 @@
                 'data': JSON.stringify(data)
             }, function (res) {
                 console.log(res);
+                new_message(res.code, res.msg);
                 $('#my_modal button.close').click();
                 table_append(data);
                 //window.location.reload();
