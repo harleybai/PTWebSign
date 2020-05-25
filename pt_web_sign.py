@@ -106,7 +106,7 @@ def get_pt():
 @app.route('/pt/add', method='POST')
 def pt_add():
     t_data = json.loads(request.forms.data)
-    keys = ['name', 'last_date', 'link', 'sign_in', 'status', 'desc']
+    keys = ['name', 'level', 'keep', 'last_date', 'link', 'sign_in', 'status', 'desc']
     for k in keys:
         if k not in t_data:
             return {"code": 1, "msg": "add site failed.", "data": t_data}
@@ -128,11 +128,13 @@ def pt_update_time():
 def pt_update():
     t_id = int(request.forms.id)
     t_name = request.forms.name
+    t_level = request.forms.level
+    t_keep = int(request.forms.keep)
     t_link = request.forms.link
     t_status = int(request.forms.status)
     t_desc = request.forms.desc
-    sql = "UPDATE t_pt SET name = '%s', link = '%s', status = %d, desc = '%s' where id = %d" % (
-        t_name, t_link, t_status, t_desc, t_id)
+    sql = "UPDATE t_pt SET name = '%s',level = '%s',keep = '%d', link = '%s', status = %d, desc = '%s' where id = %d" % (
+        t_name, t_level, t_keep, t_link, t_status, t_desc, t_id)
     model.exec_sql(sql)
     return {"code": 0, "msg": "update site successfully."}
 

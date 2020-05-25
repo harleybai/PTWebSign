@@ -12,6 +12,8 @@ def init():
     c.execute('''CREATE TABLE IF NOT EXISTS `t_pt` (
         `id` INTEGER PRIMARY KEY AUTOINCREMENT,
         `name` VARCHAR(255) NOT NULL,
+        `level` VARCHAR(255),
+        `keep` TINYINT,
         `last_date` VARCHAR(32),
         `link` VARCHAR(255),
         `sign_in` TINYINT,
@@ -43,8 +45,10 @@ def exec_sql(sql):
 def create_pt(data):
     c = conn.cursor()
     c.execute('''
-           INSERT INTO `t_pt` (`name`,`last_date`,`link`,`sign_in`,`status`,`desc`) VALUES ('%s','%s','%s',%d,%d,'%s') ;
-        ''' % (data['name'], data['last_date'], data['link'], data['sign_in'], data['status'], data['desc']))
+           INSERT INTO `t_pt` (`name`,`level`,`keep`,`last_date`,`link`,`sign_in`,`status`,`desc`) VALUES ('%s','%s',%d,'%s','%s',%d,%d,'%s') ;
+        ''' % (
+        data['name'], data['level'], data['keep'], data['last_date'], data['link'], data['sign_in'], data['status'],
+        data['desc']))
     conn.commit()
 
 
@@ -78,12 +82,14 @@ def format_pt(data):
         res.append({
             "id": row[0],
             "name": row[1],
-            "last_date": row[2],
-            "link": row[3],
-            "sign_in": row[4],
-            "status": row[5],
-            "desc": row[6],
-            "past_time": get_diff_days(row[2])
+            "level": row[2],
+            "keep": row[3],
+            "last_date": row[4],
+            "link": row[5],
+            "sign_in": row[6],
+            "status": row[7],
+            "desc": row[8],
+            "past_time": get_diff_days(row[4])
         })
     return res
 

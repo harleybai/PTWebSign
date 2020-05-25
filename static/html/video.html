@@ -106,7 +106,11 @@
     $("#linktext").change(function () {
         let input = $("#linktext").val().trim();
         $('div#div_info').html('');
-        if (input.match(/^mtopjsonp1/)) {
+        if (input.match(/www\.kisssub\.org/) || input.match(/^\w{40}$/)) {
+            let match = input.match(/show-(\w+)\./);
+            let magnet = 'magnet:?xt=urn:btih:' + (match ? match[1] : input);
+            $("#linktext").val(magnet);
+        } else if (input.match(/^mtopjsonp1/)) {
             input = input.replace(/\s*mtopjsonp1\(/, '').replace(/\)\s*$/, '');
             let jsonInput = JSON.parse(input);
             let title = jsonInput.data.data.show.title;

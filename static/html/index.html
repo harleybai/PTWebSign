@@ -81,9 +81,9 @@
             <div id="toolbar" class="form-inline">
                 <button type="button" id="toggle_status_false" class="btn btn-primary"><i
                         class="fa fa-chevron-down"></i> Show False
-                </button>&nbsp;&nbsp;
+                </button>
                 <button type="button" id="open_all" class="btn btn-primary"><i class="fa fa-refresh"></i> Open All
-                </button>&nbsp;&nbsp;
+                </button>
                 <button type="button" id="new_site" class="btn btn-primary"><i class="fa fa-plus-square-o"></i> New Site
                 </button>
             </div>
@@ -104,7 +104,7 @@
 </footer>
 
 <div id="my_modal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
@@ -143,13 +143,20 @@
             $('#my_modal div.modal-body').html([
                 '<form role="form"><div id="p_f_id" class="form-group"><label for="id">Id</label><input id="f_id" type="text" class="form-control" readonly value="' + row['id'] + '"></div>',
                 '<div class="form-group"><label for="name">Name</label><input id="f_name" type="text" class="form-control"></div>',
+                '<div class="form-group"><label for="level">Level</label><input id="f_level" type="text" class="form-control"></div>',
+                '<div class="form-group"><label for="keep">Keep</label><div class="form-control"><label class="radio-inline"><input type="radio" name="f_keep" value="1" id="keep_true">true</label><label class="radio-inline"><input type="radio" name="f_keep" value="0" id="keep_false">false</label></div></div>',
                 '<div class="form-group"><label for="link">Link</label><input id="f_link" type="text" class="form-control"></div>',
                 '<div class="form-group"><label for="status">Status</label><div class="form-control"><label class="radio-inline"><input type="radio" name="f_status" value="1" id="status_true">true</label><label class="radio-inline"><input type="radio" name="f_status" value="0" id="status_false">false</label></div></div>',
-                '<div class="form-group"><label for="desc">Description</label><textarea id="f_desc" class="form-control" rows="3"></textarea></div></form>'
+                '<div class="form-group"><label for="desc">Description</label><textarea id="f_desc" class="form-control" rows="5"></textarea></div></form>'
             ].join(''));
             //fill
             $('#my_modal h4').text("Update Info ...");
             $('#my_modal #f_name').val(row["name"]);
+            $('#my_modal #f_level').val(row["level"]);
+            if (row['keep'])
+                $("input#keep_true").attr('checked', 'true');
+            else
+                $("input#keep_false").attr('checked', 'true');
             $('#my_modal #f_link').val(row["link"]);
             if (row['status'])
                 $("input#status_true").attr('checked', 'true');
@@ -161,18 +168,24 @@
             $('#btn_submit').unbind('click');
             $('#btn_submit').click(function () {
                 let t_name = $('#my_modal #f_name').val().trim();
+                let t_level = $('#my_modal #f_level').val().trim();
+                let t_keep = $("#my_modal form input:radio[name='f_keep']:checked").val();
                 let t_link = $('#my_modal #f_link').val().trim();
-                let t_status = $("#my_modal form input:radio:checked").val();
+                let t_status = $("#my_modal form input:radio[name='f_status']:checked").val();
                 let t_desc = $('#my_modal #f_desc').val().trim();
                 $.post('/pt/update', {
                     'id': row['id'],
                     'name': t_name,
+                    'level': t_level,
+                    'keep': t_keep,
                     'link': t_link,
                     'status': t_status,
                     'desc': t_desc
                 }, function (res) {
                     $('#my_modal button.close').click();
                     row['name'] = t_name;
+                    row['level'] = t_level;
+                    row['keep'] = t_keep === '1';
                     row['link'] = t_link;
                     row['status'] = t_status === '1';
                     row['desc'] = t_desc;
@@ -237,6 +250,23 @@
             align: 'left',
             valign: 'middle'
         }, {
+            field: 'level',
+            title: 'Level',
+            align: 'middle',
+            valign: 'middle'
+        }, {
+            field: 'keep',
+            title: 'Keep',
+            align: 'middle',
+            valign: 'middle',
+            formatter: function (k) {
+                if (k) {
+                    return '<b style="color: green">True</b>';
+                } else {
+                    return '';
+                }
+            },
+        }, {
             field: 'last_date',
             title: 'Last Date',
             align: 'center',
@@ -260,11 +290,12 @@
             field: 'link',
             title: 'Link',
             align: 'left',
-            formatter: function (link) {
+            /*formatter: function (link) {
                 return '<a href="' + link + '" target="_blank">' + link + '</a>';
-            },
+            },*/
             valign: 'middle',
-            class: 'data-inline'
+            class: 'data-inline',
+            visible: false
         }, {
             field: 'status',
             title: 'Status',
@@ -282,7 +313,10 @@
             field: 'desc',
             title: 'Description',
             valign: 'middle',
-            class: 'data-inline'
+            width: 350,
+            formatter: function (d) {
+                return '<small>' + d + '</small>'
+            },
         }, {
             field: 'operate',
             title: 'Operate',
@@ -308,6 +342,8 @@
         $("#table").bootstrapTable('append', {
             'id': data.id,
             'name': data.name,
+            'level': data.level,
+            'keep': data.keep,
             'last_date': data.last_date,
             'past_time': data.past_time,
             'link': data.link,
@@ -354,8 +390,9 @@
     $('#new_site').click(function () {
         $('#my_modal div.modal-body').html([
             '<div class="form-group"><label for="name">Name</label><input id="f_name" type="text" class="form-control"></div>',
+            '<div class="form-group"><label for="level">Level</label><input id="f_level" type="text" class="form-control"></div>',
             '<div class="form-group"><label for="link">Link</label><input id="f_link" type="text" class="form-control"></div>',
-            '<div class="form-group"><label for="desc">Description</label><textarea id="f_desc" class="form-control" rows="3"></textarea></div></form>'
+            '<div class="form-group"><label for="desc">Description</label><textarea id="f_desc" class="form-control" rows="5"></textarea></div></form>'
         ].join(''));
         $('#my_modal h4').text("New Site ...");
         $('#my_modal').modal();
@@ -364,6 +401,8 @@
             $.post('/pt/add', {
                 "data": JSON.stringify({
                     'name': $('#my_modal #f_name').val().trim(),
+                    'level': $('#my_modal #f_level').val().trim(),
+                    'keep': 0,
                     'last_date': new Date().format("yyyy-MM-dd hh:mm:ss"),
                     'link': $('#my_modal #f_link').val().trim(),
                     'sign_in': 0,
