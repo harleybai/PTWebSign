@@ -418,6 +418,11 @@
 
     const play_list_finish = [];
 
+    function check_is_finish(p = "") {
+        let p_match = p.match(/^(\d+)\/(\d+)$/);
+        return p_match && p_match.length === 3 && p_match[1] === p_match[2];
+    }
+
     function format_append(data, hide_finnish = true) {
         let d = {
             "Sunday": [],
@@ -430,12 +435,12 @@
         };
         let m = [];
         for (let key in data) {
-            let p_match = data[key]['progress'].match(/^(\d+)\/(\d+)$/);
-            if (hide_finnish && p_match && p_match.length === 3 && p_match[1] === p_match[2]) {
+            let is_finish = check_is_finish(data[key]['progress']);
+            if (hide_finnish && is_finish) {
                 play_list_finish.push(data[key]);
                 continue;
             }
-            if (data[key]['type'] === 0) {
+            if (is_finish || data[key]['type'] === 0) {
                 m.push(data[key])
             } else if (data[key]['type'] === 1 && data[key]['week'] !== "") {
                 let week = data[key]['week'].split(',');
