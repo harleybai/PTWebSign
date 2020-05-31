@@ -188,6 +188,14 @@ def img_download(url, path):
     urlretrieve(url, path)
 
 
+def directory_init():
+    d = ['data', 'public/img']
+    for p in d:
+        if not os.path.exists(p):
+            os.makedirs(p)
+
+
 if __name__ == "__main__":
+    directory_init()
     model.init()
     run(app, host='localhost', port=8080)

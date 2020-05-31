@@ -229,7 +229,7 @@
                     info.week.push($(this).val());
                 });
                 info.week = info.week.join(",");
-                info.date = info.type === 0 ? $("input#f_date").val().trim() : "";
+                info.date = info.type === 0 ? $("input#f_date").val().trim() : (check_is_finish(info.progress) ? (new Date().format("yyyy-MM-dd")) : "");
                 info.time = info.type === 0 ? "" : $("input#f_time").val().trim();
                 info.douban = $("input#f_douban").val().trim();
                 info.bgm = $("input#f_bgm").val().trim();
@@ -420,7 +420,7 @@
 
     function check_is_finish(p = "") {
         let p_match = p.match(/^(\d+)\/(\d+)$/);
-        return p_match && p_match.length === 3 && p_match[1] === p_match[2];
+        return p_match && p_match.length === 3 && parseInt(p_match[1]) >= parseInt(p_match[2]);
     }
 
     function format_append(data, hide_finnish = true) {
@@ -442,7 +442,7 @@
             }
             if (is_finish || data[key]['type'] === 0) {
                 m.push(data[key])
-            } else if (data[key]['type'] === 1 && data[key]['week'] !== "") {
+            } else if (data[key]['type'] === 1) {
                 let week = data[key]['week'].split(',');
                 for (let w in week) {
                     let {...temp} = data[key];
