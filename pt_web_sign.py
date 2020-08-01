@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import json
 import model
+import video_parser
 import os
 import time
 from urllib.request import urlretrieve
@@ -27,6 +28,12 @@ def video_page():
 @app.route('/playlist', method='GET')
 def playlist_page():
     return static_file('playlist.html', './static/html')
+
+
+# pt_search
+@app.route('/ptsearch', method='GET')
+def playlist_page():
+    return static_file('ptsearch.html', './static/html')
 
 
 # play list
@@ -80,6 +87,16 @@ def playlist_page_update():
         model.exec_sql(sql)
         return {"code": 0, "msg": "update play info successfully."}
     return {"code": 1, "msg": "update play info error."}
+
+
+# play parse
+@app.route('/play/parse', method='GET')
+def play_parse():
+    url = request.query.url.strip()
+    ok, html = video_parser.get_html(url)
+    if not ok:
+        return {"code": -1, "msg": html, "data": {'url': url}}
+    return {"code": 0, "msg": "", "data": video_parser.parser(html, url)}
 
 
 # play delete
@@ -153,6 +170,13 @@ def pt_delete():
     t_id = int(request.query.id)
     model.delete_pt_by_id(t_id)
     return {"code": 0, "msg": "delete successfully."}
+
+
+@app.route('/pt/site/config', method='GET')
+def get_site_config():
+    with open('./static/json/site.json', 'r') as f:
+        res = f.read()
+    return res
 
 
 # common
