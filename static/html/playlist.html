@@ -254,7 +254,7 @@
                     info.type === 1 && $.each($("input:checkbox:checked"), function () {
                         info.week.push($(this).val());
                     });
-                    info.week = info.week.join(",");
+                    info.week = [...new Set(info.week)].filter(item => new Set(dayOfWeek).has(item)).join(",");
                     info.date = info.type === 0 ? $("input#f_date").val().trim() : (check_is_finish(info.progress) ? (new Date().format("yyyy-MM-dd")) : "");
                     info.time = info.type === 0 ? "" : $("input#f_time").val().trim();
                     info.douban = $("input#f_douban").val().trim();
@@ -498,9 +498,11 @@
                 } else if (data[key]['type'] === 1) {
                     let week = data[key]['week'].split(',');
                     for (let w in week) {
-                        let { ...temp } = data[key];
-                        temp['week'] = week[w];
-                        d[week[w]].push(temp)
+                        if (d.hasOwnProperty(week[w])) {
+                            let { ...temp } = data[key];
+                            temp['week'] = week[w];
+                            d[week[w]].push(temp)
+                        }
                     }
                 }
             }
@@ -630,7 +632,7 @@
                 data.type === 1 && $.each($("input:checkbox:checked"), function () {
                     data.week.push($(this).val());
                 });
-                data.week = data.week.join(",");
+                data.week = [...new Set(data.week)].filter(item => new Set(dayOfWeek).has(item)).join(",");
                 data.date = data.type === 0 ? $("input#f_date").val().trim() : "";
                 data.time = data.type === 0 ? "" : $("input#f_time").val().trim();
 
