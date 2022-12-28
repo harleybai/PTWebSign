@@ -31,7 +31,8 @@ def init():
         `time` VARCHAR(32),
         `douban` VARCHAR(255),
         `bgm` VARCHAR(255),
-        `video` VARCHAR(255)
+        `video` VARCHAR(255),
+        `seen_episode` VARCHAR(32)
         );''')
     conn.commit()
 
@@ -104,10 +105,10 @@ def get_diff_days(start):
 def create_play(data):
     c = conn.cursor()
     c.execute('''
-           INSERT INTO `t_play` (`pic`,`title`,`type`,`progress`,`week`,`date`,`time`,`douban`,`bgm`,`video`)
+           INSERT INTO `t_play` (`pic`,`title`,`type`,`progress`,`week`,`date`,`time`,`douban`,`bgm`,`video`,`seen_episode`)
            VALUES ('%s','%s',%d,'%s','%s','%s','%s','%s','%s','%s') ;
         ''' % (data['pic'], data['title'], data['type'], data['progress'], data['week'],
-               data['date'], data['time'], data['douban'], data['bgm'], data['video']))
+               data['date'], data['time'], data['douban'], data['bgm'], data['video'], data['seen_episode']))
     conn.commit()
 
 
@@ -149,7 +150,8 @@ def format_play(data):
             "time": row[7],
             "douban": row[8],
             "bgm": row[9],
-            "video": row[10]
+            "video": row[10],
+            "seen_episode": row[11]
         })
     return res
 

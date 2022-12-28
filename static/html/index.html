@@ -59,402 +59,404 @@
 </head>
 
 <body>
-<nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #f5f5f5">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="background-color: #f5f5f5">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
                     aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">PT Sign In</a>&nbsp;&nbsp;&nbsp;
-            <a class="navbar-brand" href="/playlist">Play List</a>&nbsp;&nbsp;&nbsp;
-            <a class="navbar-brand" href="/video">Parse Video Link</a>
-            <a class="navbar-brand" href="/ptsearch">PT Search</a>
-        </div>
-    </div>
-</nav>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-8 col-sm-offset-2 col-md-10 col-md-offset-1 main">
-            <div id="toolbar" class="form-inline">
-                <button type="button" id="toggle_status_false" class="btn btn-primary"><i
-                        class="fa fa-chevron-down"></i> Show False
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
                 </button>
-                <button type="button" id="open_all" class="btn btn-primary"><i class="fa fa-refresh"></i> Open All
-                </button>
-                <button type="button" id="new_site" class="btn btn-primary"><i class="fa fa-plus-square-o"></i> New Site
-                </button>
-            </div>
-            <div class="table-responsive">
-                <table id="table"></table>
+                <a class="navbar-brand" href="#">PT Sign In</a>&nbsp;&nbsp;&nbsp;
+                <a class="navbar-brand" href="/playlist">Play List</a>&nbsp;&nbsp;&nbsp;
+                <a class="navbar-brand" href="/video">Parse Video Link</a>
+                <a class="navbar-brand" href="/ptsearch">PT Search</a>
             </div>
         </div>
-    </div>
-</div>
-<footer class="footer">
-    <div class="container">
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="https://github.com/harleybai/PTWebSign" target="_blank">Powered By @harleybai</a></li>
-            </ul>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2 col-md-10 col-md-offset-1 main">
+                <div id="toolbar" class="form-inline">
+                    <button type="button" id="toggle_status_false" class="btn btn-primary"><i
+                            class="fa fa-chevron-down"></i> Show False
+                    </button>
+                    <button type="button" id="open_all" class="btn btn-primary"><i class="fa fa-refresh"></i> Open All
+                    </button>
+                    <button type="button" id="new_site" class="btn btn-primary"><i class="fa fa-plus-square-o"></i> New
+                        Site
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table id="table"></table>
+                </div>
+            </div>
         </div>
     </div>
-</footer>
+    <footer class="footer">
+        <div class="container">
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="https://github.com/harleybai/PTWebSign" target="_blank">Powered By @harleybai</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
 
-<div id="my_modal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-md" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title"></h4>
-            </div>
-            <div class="modal-body"></div>
-            <div class="modal-footer">
-                <button type="button" id="btn_submit" class="btn btn-primary">Submit</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+    <div id="my_modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" id="btn_submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Bootstrap core JavaScript
+    <!-- Bootstrap core JavaScript
 ================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="../js/jquery.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/bootstrap-table.min.js"></script>
-<script>
-    window.operateEvents = {
-        'click .status': function (e, value, row, index) {
-            let status = row['status'] ? 0 : 1;
-            $.getJSON('/pt/status', {"id": row['id'], "status": status}, function (res) {
-                $('#table').bootstrapTable('updateCell', {
-                    index: index,
-                    field: 'status',
-                    value: status !== 0
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-table.min.js"></script>
+    <script>
+        window.operateEvents = {
+            'click .status': function (e, value, row, index) {
+                let status = row['status'] ? 0 : 1;
+                $.getJSON('/pt/status', { "id": row['id'], "status": status }, function (res) {
+                    $('#table').bootstrapTable('updateCell', {
+                        index: index,
+                        field: 'status',
+                        value: status !== 0
+                    });
+                    console.log(res);
                 });
-                console.log(res);
-            });
-        },
-        'click .edit': function (e, value, row, index) {
-            $('#my_modal div.modal-body').html([
-                '<form role="form"><div id="p_f_id" class="form-group"><label for="id">Id</label><input id="f_id" type="text" class="form-control" readonly value="' + row['id'] + '"></div>',
-                '<div class="form-group"><label for="name">Name</label><input id="f_name" type="text" class="form-control"></div>',
-                '<div class="form-group"><label for="level">Level</label><input id="f_level" type="text" class="form-control"></div>',
-                '<div class="form-group"><label for="keep">Keep</label><div class="form-control"><label class="radio-inline"><input type="radio" name="f_keep" value="1" id="keep_true">true</label><label class="radio-inline"><input type="radio" name="f_keep" value="0" id="keep_false">false</label></div></div>',
-                '<div class="form-group"><label for="link">Link</label><input id="f_link" type="text" class="form-control"></div>',
-                '<div class="form-group"><label for="status">Status</label><div class="form-control"><label class="radio-inline"><input type="radio" name="f_status" value="1" id="status_true">true</label><label class="radio-inline"><input type="radio" name="f_status" value="0" id="status_false">false</label></div></div>',
-                '<div class="form-group"><label for="desc">Description</label><textarea id="f_desc" class="form-control" rows="5"></textarea></div></form>'
-            ].join(''));
-            //fill
-            $('#my_modal h4').text("Update Info ...");
-            $('#my_modal #f_name').val(row["name"]);
-            $('#my_modal #f_level').val(row["level"]);
-            if (row['keep'])
-                $("input#keep_true").attr('checked', 'true');
-            else
-                $("input#keep_false").attr('checked', 'true');
-            $('#my_modal #f_link').val(row["link"]);
-            if (row['status'])
-                $("input#status_true").attr('checked', 'true');
-            else
-                $("input#status_false").attr('checked', 'true');
-            $('#my_modal #f_desc').text(row["desc"]);
-            $('#my_modal').modal();
-            //submit
-            $('#btn_submit').unbind('click');
-            $('#btn_submit').click(function () {
-                let t_name = $('#my_modal #f_name').val().trim();
-                let t_level = $('#my_modal #f_level').val().trim();
-                let t_keep = $("#my_modal form input:radio[name='f_keep']:checked").val();
-                let t_link = $('#my_modal #f_link').val().trim();
-                let t_status = $("#my_modal form input:radio[name='f_status']:checked").val();
-                let t_desc = $('#my_modal #f_desc').val().trim();
-                $.post('/pt/update', {
-                    'id': row['id'],
-                    'name': t_name,
-                    'level': t_level,
-                    'keep': t_keep,
-                    'link': t_link,
-                    'status': t_status,
-                    'desc': t_desc
+            },
+            'click .edit': function (e, value, row, index) {
+                $('#my_modal div.modal-body').html([
+                    '<form role="form"><div id="p_f_id" class="form-group"><label for="id">Id</label><input id="f_id" type="text" class="form-control" readonly value="' + row['id'] + '"></div>',
+                    '<div class="form-group"><label for="name">Name</label><input id="f_name" type="text" class="form-control"></div>',
+                    '<div class="form-group"><label for="level">Level</label><input id="f_level" type="text" class="form-control"></div>',
+                    '<div class="form-group"><label for="keep">Keep</label><div class="form-control"><label class="radio-inline"><input type="radio" name="f_keep" value="1" id="keep_true">true</label><label class="radio-inline"><input type="radio" name="f_keep" value="0" id="keep_false">false</label></div></div>',
+                    '<div class="form-group"><label for="link">Link</label><input id="f_link" type="text" class="form-control"></div>',
+                    '<div class="form-group"><label for="status">Status</label><div class="form-control"><label class="radio-inline"><input type="radio" name="f_status" value="1" id="status_true">true</label><label class="radio-inline"><input type="radio" name="f_status" value="0" id="status_false">false</label></div></div>',
+                    '<div class="form-group"><label for="desc">Description</label><textarea id="f_desc" class="form-control" rows="5"></textarea></div></form>'
+                ].join(''));
+                //fill
+                $('#my_modal h4').text("Update Info ...");
+                $('#my_modal #f_name').val(row["name"]);
+                $('#my_modal #f_level').val(row["level"]);
+                if (row['keep'])
+                    $("input#keep_true").attr('checked', 'true');
+                else
+                    $("input#keep_false").attr('checked', 'true');
+                $('#my_modal #f_link').val(row["link"]);
+                if (row['status'])
+                    $("input#status_true").attr('checked', 'true');
+                else
+                    $("input#status_false").attr('checked', 'true');
+                $('#my_modal #f_desc').text(row["desc"]);
+                $('#my_modal').modal();
+                //submit
+                $('#btn_submit').unbind('click');
+                $('#btn_submit').click(function () {
+                    let t_name = $('#my_modal #f_name').val().trim();
+                    let t_level = $('#my_modal #f_level').val().trim();
+                    let t_keep = $("#my_modal form input:radio[name='f_keep']:checked").val();
+                    let t_link = $('#my_modal #f_link').val().trim();
+                    let t_status = $("#my_modal form input:radio[name='f_status']:checked").val();
+                    let t_desc = $('#my_modal #f_desc').val().trim();
+                    $.post('/pt/update', {
+                        'id': row['id'],
+                        'name': t_name,
+                        'level': t_level,
+                        'keep': t_keep,
+                        'link': t_link,
+                        'status': t_status,
+                        'desc': t_desc
+                    }, function (res) {
+                        $('#my_modal button.close').click();
+                        row['name'] = t_name;
+                        row['level'] = t_level;
+                        row['keep'] = t_keep === '1';
+                        row['link'] = t_link;
+                        row['status'] = t_status === '1';
+                        row['desc'] = t_desc;
+                        $('#table').bootstrapTable('updateRow', {
+                            index: index,
+                            row: row
+                        });
+                        console.log(res);
+                    });
+                });
+            },
+            'click .remove': function (e, value, row, index) {
+                $.getJSON('/pt/delete?id=' + row['id'], function (res) {
+                    if (res.code === 0) {
+                        $('#table').bootstrapTable('remove', {
+                            field: 'id',
+                            values: row['id']
+                        });
+                    }
+                    console.log(res);
+                });
+
+            },
+            'click .open': function (e, value, row, index) {
+                let now = new Date().format("yyyy-MM-dd hh:mm:ss");
+                row['last_date'] = now;
+                row['past_time'] = '0天0小时';
+                window.open(row["link"]);
+                $.post('/pt/last_date', {
+                    "data": JSON.stringify({
+                        "id": row['id'],
+                        "time": now
+                    })
                 }, function (res) {
-                    $('#my_modal button.close').click();
-                    row['name'] = t_name;
-                    row['level'] = t_level;
-                    row['keep'] = t_keep === '1';
-                    row['link'] = t_link;
-                    row['status'] = t_status === '1';
-                    row['desc'] = t_desc;
                     $('#table').bootstrapTable('updateRow', {
                         index: index,
                         row: row
                     });
                     console.log(res);
                 });
-            });
-        },
-        'click .remove': function (e, value, row, index) {
-            $.getJSON('/pt/delete?id=' + row['id'], function (res) {
-                if (res.code === 0) {
-                    $('#table').bootstrapTable('remove', {
-                        field: 'id',
-                        values: row['id']
-                    });
-                }
-                console.log(res);
-            });
-
-        },
-        'click .open': function (e, value, row, index) {
-            let now = new Date().format("yyyy-MM-dd hh:mm:ss");
-            row['last_date'] = now;
-            row['past_time'] = '0天0小时';
-            window.open(row["link"]);
-            $.post('/pt/last_date', {
-                "data": JSON.stringify({
-                    "id": row['id'],
-                    "time": now
-                })
-            }, function (res) {
-                $('#table').bootstrapTable('updateRow', {
-                    index: index,
-                    row: row
-                });
-                console.log(res);
-            });
-        }
-    };
-
-    let max_days = 2;
-    $('#table').bootstrapTable({
-        classes: "table table-hover table-striped",
-        search: true,
-        searchAlign: 'left',
-        striped: true,
-        sortOrder: "asc",
-        sortName: "last_date",
-        toolbar: "#toolbar",
-        toolbarAlign: "right",
-        columns: [{
-            field: 'id',
-            title: '#',
-            align: 'center',
-            valign: 'middle'
-        }, {
-            field: 'name',
-            title: 'Name',
-            align: 'center',
-            valign: 'middle'
-        }, {
-            field: 'level',
-            title: 'Level',
-            align: 'center',
-            valign: 'middle'
-        }, {
-            field: 'keep',
-            title: 'Keep',
-            align: 'center',
-            valign: 'middle',
-            formatter: function (k) {
-                if (k) {
-                    return '<b style="color: green">True</b>';
-                } else {
-                    return '';
-                }
-            },
-        }, {
-            field: 'last_date',
-            title: 'Last Date',
-            align: 'center',
-            valign: 'middle',
-            class: 'data-inline',
-            sortable: 'true'
-        }, {
-            field: 'past_time',
-            title: 'Past Time',
-            align: 'center',
-            formatter: function (past_time) {
-                if (parseInt(past_time) >= max_days) {
-                    return '<b style="color: red">' + past_time + '</b>';
-                }
-                return past_time;
-            },
-            valign: 'middle',
-            class: 'data-inline',
-            sortable: 'true'
-        }, {
-            field: 'link',
-            title: 'Link',
-            align: 'left',
-            /*formatter: function (link) {
-                return '<a href="' + link + '" target="_blank">' + link + '</a>';
-            },*/
-            valign: 'middle',
-            class: 'data-inline',
-            visible: false
-        }, {
-            field: 'status',
-            title: 'Status',
-            align: 'center',
-            formatter: function (s) {
-                if (s) {
-                    return '<b style="color: green">True</b>';
-                } else {
-                    return '<b style="color: red">False</b>';
-                }
-            },
-            valign: 'middle',
-            class: 'data-inline'
-        }, {
-            field: 'desc',
-            title: 'Description',
-            valign: 'middle',
-            width: 350,
-            formatter: function (d) {
-                return '<small>' + d + '</small>'
-            },
-        }, {
-            field: 'operate',
-            title: 'Operate',
-            align: 'center',
-            valign: 'middle',
-            events: window.operateEvents,
-            formatter: function () {
-                return [
-                    '<a class="status" href="javascript:void(0)" title="Change Status"><i class="fa fa-dot-circle-o"></i></a>',
-                    '<a class="edit" href="javascript:void(0)" title="Edit"><i class="fa fa-edit fa-fw"></i></a>',
-                    '<a class="open" href="javascript:void(0)" title="Open"><i class="fa fa-share-square"></i></a>'
-                ].join('&nbsp;&nbsp;&nbsp;&nbsp;');
             }
-        }],
-        pagination: true,
-        sidePagination: "client",
-        pageSize: 50,
-        pageList: [10, 25, 50, 100, 200, "ALL"],
-        escape: true
-    });
-
-    function table_append(data) {
-        $("#table").bootstrapTable('append', {
-            'id': data.id,
-            'name': data.name,
-            'level': data.level,
-            'keep': data.keep,
-            'last_date': data.last_date,
-            'past_time': data.past_time,
-            'link': data.link,
-            'status': data.status,
-            'desc': data.desc,
-            "operate": ""
-        });
-    }
-
-    //时间格式化
-    Date.prototype.format = function (format) {
-        let o = {
-            "M+": this.getMonth() + 1, //month
-            "d+": this.getDate(), //day
-            "h+": this.getHours(), //hour
-            "m+": this.getMinutes(), //minute
-            "s+": this.getSeconds(), //second
-            "q+": Math.floor((this.getMonth() + 3) / 3), //quarter
-            "S": this.getMilliseconds() //millisecond
         };
-        format = (format == "") ? "yyyy-MM-dd hh:mm:ss" : format;
-        if (/(y+)/.test(format))
-            format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (let k in o)
-            if (new RegExp("(" + k + ")").test(format))
-                format = format.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
-        return format;
-    };
 
-    $('#open_all').click(function () {
-        let t_data = $('#table').bootstrapTable('getData');
-        let id = [];
-        for (let i in t_data) {
-            id.push(t_data[i]['id']);
-            window.open(t_data[i]["link"]);
-        }
-        $.post('/pt/last_date', {
-            "data": JSON.stringify({"id": id.join(","), "time": new Date().format("yyyy-MM-dd hh:mm:ss")})
-        }, function () {
-            window.location.reload();
-        })
-    });
-
-    $('#new_site').click(function () {
-        $('#my_modal div.modal-body').html([
-            '<div class="form-group"><label for="name">Name</label><input id="f_name" type="text" class="form-control"></div>',
-            '<div class="form-group"><label for="level">Level</label><input id="f_level" type="text" class="form-control"></div>',
-            '<div class="form-group"><label for="link">Link</label><input id="f_link" type="text" class="form-control"></div>',
-            '<div class="form-group"><label for="desc">Description</label><textarea id="f_desc" class="form-control" rows="5"></textarea></div></form>'
-        ].join(''));
-        $('#my_modal h4').text("New Site ...");
-        $('#my_modal').modal();
-        $('#btn_submit').unbind('click');
-        $('#btn_submit').click(function () {
-            $.post('/pt/add', {
-                "data": JSON.stringify({
-                    'name': $('#my_modal #f_name').val().trim(),
-                    'level': $('#my_modal #f_level').val().trim(),
-                    'keep': 0,
-                    'last_date': new Date().format("yyyy-MM-dd hh:mm:ss"),
-                    'link': $('#my_modal #f_link').val().trim(),
-                    'sign_in': 0,
-                    'status': 1,
-                    'desc': $('#my_modal #f_desc').val().trim()
-                })
-            }, function (res) {
-                console.log(res);
-                $('#my_modal button.close').click();
-                window.location.reload();
-            });
-        })
-    });
-
-    const status_false_site = [];
-
-    function get_data() {
-        $.getJSON('/pt/data', function (data) {
-            max_days = parseInt(data['max_days']);
-            for (let index in data['data']) {
-                if (!data['data'][index].status) {
-                    status_false_site.push(data['data'][index]);
-                    continue;
+        let max_days = 2;
+        $('#table').bootstrapTable({
+            classes: "table table-hover table-striped",
+            search: true,
+            searchAlign: 'left',
+            striped: true,
+            sortOrder: "asc",
+            sortName: "last_date",
+            toolbar: "#toolbar",
+            toolbarAlign: "right",
+            columns: [{
+                field: 'id',
+                title: '#',
+                align: 'center',
+                valign: 'middle'
+            }, {
+                field: 'name',
+                title: 'Name',
+                align: 'center',
+                valign: 'middle'
+            }, {
+                field: 'level',
+                title: 'Level',
+                align: 'center',
+                valign: 'middle'
+            }, {
+                field: 'keep',
+                title: 'Keep',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (k) {
+                    if (k) {
+                        return '<b style="color: green">True</b>';
+                    } else {
+                        return '';
+                    }
+                },
+            }, {
+                field: 'last_date',
+                title: 'Last Date',
+                align: 'center',
+                valign: 'middle',
+                class: 'data-inline',
+                sortable: 'true'
+            }, {
+                field: 'past_time',
+                title: 'Past Time',
+                align: 'center',
+                formatter: function (past_time) {
+                    if (parseInt(past_time) >= max_days) {
+                        return '<b style="color: red">' + past_time + '</b>';
+                    }
+                    return past_time;
+                },
+                valign: 'middle',
+                class: 'data-inline',
+                sortable: 'true'
+            }, {
+                field: 'link',
+                title: 'Link',
+                align: 'left',
+                /*formatter: function (link) {
+                    return '<a href="' + link + '" target="_blank">' + link + '</a>';
+                },*/
+                valign: 'middle',
+                class: 'data-inline',
+                visible: false
+            }, {
+                field: 'status',
+                title: 'Status',
+                align: 'center',
+                formatter: function (s) {
+                    if (s) {
+                        return '<b style="color: green">True</b>';
+                    } else {
+                        return '<b style="color: red">False</b>';
+                    }
+                },
+                valign: 'middle',
+                class: 'data-inline'
+            }, {
+                field: 'desc',
+                title: 'Description',
+                valign: 'middle',
+                width: 350,
+                formatter: function (d) {
+                    return '<small>' + d + '</small>'
+                },
+            }, {
+                field: 'operate',
+                title: 'Operate',
+                align: 'center',
+                valign: 'middle',
+                events: window.operateEvents,
+                formatter: function () {
+                    return [
+                        '<a class="status" href="javascript:void(0)" title="Change Status"><i class="fa fa-dot-circle-o"></i></a>',
+                        '<a class="edit" href="javascript:void(0)" title="Edit"><i class="fa fa-edit fa-fw"></i></a>',
+                        '<a class="open" href="javascript:void(0)" title="Open"><i class="fa fa-share-square"></i></a>'
+                    ].join('&nbsp;&nbsp;&nbsp;&nbsp;');
                 }
-                table_append(data['data'][index]);
+            }],
+            pagination: true,
+            sidePagination: "client",
+            pageSize: 50,
+            pageList: [10, 25, 50, 100, 200, "ALL"],
+            escape: true
+        });
+
+        function table_append(data) {
+            $("#table").bootstrapTable('append', {
+                'id': data.id,
+                'name': data.name,
+                'level': data.level,
+                'keep': data.keep,
+                'last_date': data.last_date,
+                'past_time': data.past_time,
+                'link': data.link,
+                'status': data.status,
+                'desc': data.desc,
+                "operate": ""
+            });
+        }
+
+        //时间格式化
+        Date.prototype.format = function (format) {
+            let o = {
+                "M+": this.getMonth() + 1, //month
+                "d+": this.getDate(), //day
+                "h+": this.getHours(), //hour
+                "m+": this.getMinutes(), //minute
+                "s+": this.getSeconds(), //second
+                "q+": Math.floor((this.getMonth() + 3) / 3), //quarter
+                "S": this.getMilliseconds() //millisecond
+            };
+            format = (format == "") ? "yyyy-MM-dd hh:mm:ss" : format;
+            if (/(y+)/.test(format))
+                format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (let k in o)
+                if (new RegExp("(" + k + ")").test(format))
+                    format = format.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+            return format;
+        };
+
+        $('#open_all').click(function () {
+            let t_data = $('#table').bootstrapTable('getData');
+            let id = [];
+            for (let i in t_data) {
+                id.push(t_data[i]['id']);
+                window.open(t_data[i]["link"]);
+            }
+            $.post('/pt/last_date', {
+                "data": JSON.stringify({ "id": id.join(","), "time": new Date().format("yyyy-MM-dd hh:mm:ss") })
+            }, function () {
+                window.location.reload();
+            })
+        });
+
+        $('#new_site').click(function () {
+            $('#my_modal div.modal-body').html([
+                '<div class="form-group"><label for="name">Name</label><input id="f_name" type="text" class="form-control"></div>',
+                '<div class="form-group"><label for="level">Level</label><input id="f_level" type="text" class="form-control"></div>',
+                '<div class="form-group"><label for="link">Link</label><input id="f_link" type="text" class="form-control"></div>',
+                '<div class="form-group"><label for="desc">Description</label><textarea id="f_desc" class="form-control" rows="5"></textarea></div></form>'
+            ].join(''));
+            $('#my_modal h4').text("New Site ...");
+            $('#my_modal').modal();
+            $('#btn_submit').unbind('click');
+            $('#btn_submit').click(function () {
+                $.post('/pt/add', {
+                    "data": JSON.stringify({
+                        'name': $('#my_modal #f_name').val().trim(),
+                        'level': $('#my_modal #f_level').val().trim(),
+                        'keep': 0,
+                        'last_date': new Date().format("yyyy-MM-dd hh:mm:ss"),
+                        'link': $('#my_modal #f_link').val().trim(),
+                        'sign_in': 0,
+                        'status': 1,
+                        'desc': $('#my_modal #f_desc').val().trim()
+                    })
+                }, function (res) {
+                    console.log(res);
+                    $('#my_modal button.close').click();
+                    window.location.reload();
+                });
+            })
+        });
+
+        const status_false_site = [];
+
+        function get_data() {
+            $.getJSON('/pt/data', function (data) {
+                max_days = parseInt(data['max_days']);
+                for (let index in data['data']) {
+                    if (!data['data'][index].status) {
+                        status_false_site.push(data['data'][index]);
+                        continue;
+                    }
+                    table_append(data['data'][index]);
+                }
+            });
+        }
+
+        $('button#toggle_status_false').click(function () {
+            let text = $('button#toggle_status_false').text();
+            if (text.match(/Show False/)) {
+                for (let index = 0; index < status_false_site.length; index++) {
+                    table_append(status_false_site[index]);
+                }
+                $('button#toggle_status_false').html('<i class="fa fa-chevron-up"></i> Hide False');
+            } else {
+                let ids = [];
+                for (let index = 0; index < status_false_site.length; index++) {
+                    ids.push(status_false_site[index].id);
+                }
+                $("#table").bootstrapTable('remove', {
+                    field: 'id',
+                    values: ids
+                });
+                $('button#toggle_status_false').html('<i class="fa fa-chevron-down"></i> Show False');
             }
         });
-    }
 
-    $('button#toggle_status_false').click(function () {
-        let text = $('button#toggle_status_false').text();
-        if (text.match(/Show False/)) {
-            for (let index = 0; index < status_false_site.length; index++) {
-                table_append(status_false_site[index]);
-            }
-            $('button#toggle_status_false').html('<i class="fa fa-chevron-up"></i> Hide False');
-        } else {
-            let ids = [];
-            for (let index = 0; index < status_false_site.length; index++) {
-                ids.push(status_false_site[index].id);
-            }
-            $("#table").bootstrapTable('remove', {
-                field: 'id',
-                values: ids
-            });
-            $('button#toggle_status_false').html('<i class="fa fa-chevron-down"></i> Show False');
-        }
-    });
-
-    $(document).ready(get_data());
-</script>
+        $(document).ready(get_data());
+    </script>
 </body>
 
 </html>

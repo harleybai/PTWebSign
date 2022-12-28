@@ -56,13 +56,18 @@ def play_delete():
 @app.route('/play/add', method='POST')
 def play_add():
     t_data = json.loads(request.forms.data)
-    keys = ['pic', 'title', 'type', 'progress', 'week', 'date', 'time', 'douban', 'bgm', 'video']
+    keys = ['pic', 'title', 'type', 'progress', 'week', 'date',
+            'time', 'douban', 'bgm', 'video', 'seen_episode']
     for k in keys:
         if k not in t_data:
             return {"code": 1, "msg": "add play info failed.", "data": t_data}
-    t_data['pic'] = img_download_play_list(t_data['pic'], time.strftime("%Y%m%d_%H%M%S", time.localtime()))
-    model.create_play(t_data)
-    return {"code": 0, "msg": "add paly info successfully.", "data": t_data}
+    try:
+        t_data['pic'] = img_download_play_list(
+            t_data['pic'], time.strftime("%Y%m%d_%H%M%S", time.localtime()))
+        model.create_play(t_data)
+        return {"code": 0, "msg": "add paly info successfully.", "data": t_data}
+    except e:
+        return {"code": 1, "msg": "Unable to download img: %s" % e}
 
 
 # play update
@@ -78,15 +83,20 @@ def playlist_page_update():
     t_douban = request.forms.douban
     t_bgm = request.forms.bgm
     t_video = request.forms.video
+    t_seen_episode = request.forms.seen_episode
     # 下载图片更新链接
     data = model.get_play_by_id(t_id)
-    t_pic = img_download_play_list(t_pic, data[0]['pic'].split('/')[-1].split('.')[0])
-    sql = "UPDATE t_play SET pic = '%s', title = '%s', progress = '%s', week = '%s', date = '%s', time = '%s', douban = '%s', bgm = '%s', video = '%s' where id = %d" % (
-        t_pic, t_title, t_progress, t_week, t_date, t_time, t_douban, t_bgm, t_video, t_id)
-    if t_id > 0:
-        model.exec_sql(sql)
-        return {"code": 0, "msg": "update play info successfully."}
-    return {"code": 1, "msg": "update play info error."}
+    try:
+        t_pic = img_download_play_list(
+            t_pic, data[0]['pic'].split('/')[-1].split('.')[0])
+        sql = "UPDATE t_play SET pic = '%s', title = '%s', progress = '%s', week = '%s', date = '%s', time = '%s', douban = '%s', bgm = '%s', video = '%s', seen_episode = '%s' where id = %d" % (
+            t_pic, t_title, t_progress, t_week, t_date, t_time, t_douban, t_bgm, t_video, t_seen_episode, t_id)
+        if t_id > 0:
+            model.exec_sql(sql)
+            return {"code": 0, "msg": "update play info successfully."}
+        return {"code": 1, "msg": "update play info error."}
+    except e:
+        return {"code": 1, "msg": "Unable to download img: %s" % e}
 
 
 # play parse
@@ -123,7 +133,8 @@ def get_pt():
 @app.route('/pt/add', method='POST')
 def pt_add():
     t_data = json.loads(request.forms.data)
-    keys = ['name', 'level', 'keep', 'last_date', 'link', 'sign_in', 'status', 'desc']
+    keys = ['name', 'level', 'keep', 'last_date',
+            'link', 'sign_in', 'status', 'desc']
     for k in keys:
         if k not in t_data:
             return {"code": 1, "msg": "add site failed.", "data": t_data}
@@ -136,7 +147,8 @@ def pt_update_time():
     t_data = json.loads(request.forms.data)
     if 'id' not in t_data or 'time' not in t_data:
         return {"code": 1, "msg": "update data failed.", "data": t_data}
-    sql = 'UPDATE t_pt SET last_date = \'%s\' where id IN(%s)' % (t_data['time'], t_data['id'])
+    sql = 'UPDATE t_pt SET last_date = \'%s\' where id IN(%s)' % (
+        t_data['time'], t_data['id'])
     model.exec_sql(sql)
     return {"code": 0, "msg": "update data successfully.", "data": t_data}
 
