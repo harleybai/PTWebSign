@@ -66,7 +66,7 @@ def play_add():
             t_data['pic'], time.strftime("%Y%m%d_%H%M%S", time.localtime()))
         model.create_play(t_data)
         return {"code": 0, "msg": "add paly info successfully.", "data": t_data}
-    except e:
+    except Exception as e:
         return {"code": 1, "msg": "Unable to download img: %s" % e}
 
 
@@ -95,7 +95,7 @@ def playlist_page_update():
             model.exec_sql(sql)
             return {"code": 0, "msg": "update play info successfully."}
         return {"code": 1, "msg": "update play info error."}
-    except e:
+    except Exception as e:
         return {"code": 1, "msg": "Unable to download img: %s" % e}
 
 

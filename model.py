@@ -106,7 +106,7 @@ def create_play(data):
     c = conn.cursor()
     c.execute('''
            INSERT INTO `t_play` (`pic`,`title`,`type`,`progress`,`week`,`date`,`time`,`douban`,`bgm`,`video`,`seen_episode`)
-           VALUES ('%s','%s',%d,'%s','%s','%s','%s','%s','%s','%s') ;
+           VALUES ('%s','%s',%d,'%s','%s','%s','%s','%s','%s','%s','%s');
         ''' % (data['pic'], data['title'], data['type'], data['progress'], data['week'],
                data['date'], data['time'], data['douban'], data['bgm'], data['video'], data['seen_episode']))
     conn.commit()
