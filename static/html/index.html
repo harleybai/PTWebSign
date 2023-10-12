@@ -21,6 +21,7 @@
         body {
             padding-top: 50px;
             margin-bottom: 40px;
+            background-color: #D0D0D0;
         }
 
         .navbar-fixed-top {
@@ -54,6 +55,11 @@
         td.data-inline {
             word-break: keep-all;
             white-space: nowrap;
+        }
+
+        .table-hover>tbody>tr:hover>td,
+        .table-hover>tbody>tr:hover>th {
+            background-color: #b1c7c7;
         }
     </style>
 </head>
@@ -234,7 +240,7 @@
 
         let max_days = 2;
         $('#table').bootstrapTable({
-            classes: "table table-hover table-striped",
+            classes: "table table-hover",
             search: true,
             searchAlign: 'left',
             striped: true,

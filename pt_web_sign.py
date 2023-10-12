@@ -208,14 +208,15 @@ def error404():
 
 
 def img_download_play_list(url, file_name):
+    return url
     # 不是外部图片，则不下载
-    if not url.startswith('http'):
-        return url
-    img_type = url.split('/')[-1].split('.')[-1]
-    if img_type not in ['jpg', 'img', 'png', 'webp', 'jiff', 'gif']:
-        img_type = 'jpg'
-    img_download(url, 'public/img/' + file_name + '.' + img_type)
-    return '/public/img/' + file_name + '.' + img_type
+    # if not url.startswith('http'):
+    #     return url
+    # img_type = url.split('/')[-1].split('.')[-1]
+    # if img_type not in ['jpg', 'img', 'png', 'webp', 'jiff', 'gif']:
+    #     img_type = 'jpg'
+    # img_download(url, 'public/img/' + file_name + '.' + img_type)
+    # return '/public/img/' + file_name + '.' + img_type
 
 
 def img_download(url, path):
