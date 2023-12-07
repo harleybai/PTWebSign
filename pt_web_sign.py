@@ -5,7 +5,8 @@ import model
 import video_parser
 import os
 import time
-from urllib.request import urlretrieve
+import logging
+import requests
 
 from bottle import Bottle, run, error, static_file, request
 
@@ -44,7 +45,7 @@ def play_data():
 
 
 @app.route('/play/info', method='GET')
-def play_delete():
+def play_info():
     t_id = int(request.query.id)
     data = model.get_play_by_id(t_id)
     if len(data) > 0:
@@ -61,13 +62,9 @@ def play_add():
     for k in keys:
         if k not in t_data:
             return {"code": 1, "msg": "add play info failed.", "data": t_data}
-    try:
-        t_data['pic'] = img_download_play_list(
-            t_data['pic'], time.strftime("%Y%m%d_%H%M%S", time.localtime()))
-        model.create_play(t_data)
-        return {"code": 0, "msg": "add paly info successfully.", "data": t_data}
-    except Exception as e:
-        return {"code": 1, "msg": "Unable to download img: %s" % e}
+    t_data['pic'] = img_download_play_list(t_data['pic'])
+    model.create_play(t_data)
+    return {"code": 0, "msg": "add paly info successfully."}
 
 
 # play update
@@ -87,8 +84,7 @@ def playlist_page_update():
     # 下载图片更新链接
     data = model.get_play_by_id(t_id)
     try:
-        t_pic = img_download_play_list(
-            t_pic, data[0]['pic'].split('/')[-1].split('.')[0])
+        t_pic = img_download_play_list(t_pic)
         sql = "UPDATE t_play SET pic = '%s', title = '%s', progress = '%s', week = '%s', date = '%s', time = '%s', douban = '%s', bgm = '%s', video = '%s', seen_episode = '%s' where id = %d" % (
             t_pic, t_title, t_progress, t_week, t_date, t_time, t_douban, t_bgm, t_video, t_seen_episode, t_id)
         if t_id > 0:
@@ -207,22 +203,31 @@ def error404():
     return 'Nothing here, sorry'
 
 
-def img_download_play_list(url, file_name):
-    return url
+def img_download_play_list(url):
     # 不是外部图片，则不下载
-    # if not url.startswith('http'):
-    #     return url
-    # img_type = url.split('/')[-1].split('.')[-1]
-    # if img_type not in ['jpg', 'img', 'png', 'webp', 'jiff', 'gif']:
-    #     img_type = 'jpg'
-    # img_download(url, 'public/img/' + file_name + '.' + img_type)
-    # return '/public/img/' + file_name + '.' + img_type
-
-
-def img_download(url, path):
-    if os.path.exists(path):
-        os.remove(path)
-    urlretrieve(url, path)
+    if not url.startswith('http'):
+        return url
+    # 保存图片路径
+    img_type = url.split('/')[-1].split('.')[-1]
+    if img_type not in ['jpg', 'img', 'png', 'webp', 'jiff', 'gif']:
+        img_type = 'jpg'
+    pic = 'public/img/' + time.strftime("%Y%m%d_%H%M%S", time.localtime()) + '.' + img_type
+    if os.path.exists(pic):
+        return pic
+    # 下载图片
+    try:
+        rsp = requests.get(url)
+        if rsp.status_code == 200:
+            with open(pic, 'wb') as file:
+                file.write(rsp.content)
+            return pic
+        else:
+            logging.error('requests.get err, status_code：%d' % rsp.status_code)
+            return url
+    except Exception as e:
+        print(e)
+        logging.error("download img err, url: %s" % url)
+        return url
 
 
 def directory_init():

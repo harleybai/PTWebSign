@@ -272,11 +272,7 @@
                         console.log(res);
                         new_message(res.code, res.msg);
                         if (res.code === 0) {
-                            $('#table').bootstrapTable('remove', {
-                                field: 'id',
-                                values: [row['id']]
-                            });
-                            format_append([info]);
+                            location.reload();
                         }
                         $('#my_modal button.close').click();
                     });
@@ -655,8 +651,7 @@
                     console.log(res);
                     new_message(res.code, res.msg);
                     $('#my_modal button.close').click();
-                    table_append(data);
-                    //window.location.reload();
+                    location.reload();
                 });
             });
         });
