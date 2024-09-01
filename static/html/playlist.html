@@ -337,6 +337,17 @@
                 valign: 'middle',
                 visible: false
             }, {
+                field: 'type',
+                title: 'Type',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (type) {
+                    if (type == 1) {
+                        return '<span class="label label-success">动漫/电视剧</span>';
+                    }
+                    return '<span class="label label-primary">电影</span>';
+                }
+            }, {
                 field: 'title',
                 title: 'Title',
                 align: 'center',
@@ -541,6 +552,7 @@
             $("#table").bootstrapTable('append', {
                 'pic': data.pic,
                 'id': data.id,
+                'type': data.type,
                 'title': data.title,
                 'progress': data.progress,
                 'seen_episode': data.seen_episode,
