@@ -327,6 +327,7 @@
                 title: 'Pic',
                 align: 'center',
                 valign: 'middle',
+                width: 70,
                 formatter: function (pic) {
                     return '<img src="' + pic + '" width="40" />';
                 }
@@ -341,6 +342,7 @@
                 title: 'Type',
                 align: 'center',
                 valign: 'middle',
+                width: 70,
                 formatter: function (type) {
                     if (type == 1) {
                         return '<span class="label label-success">动漫/电视剧</span>';
@@ -375,6 +377,7 @@
                 title: 'Seen Episode',
                 align: 'center',
                 valign: 'middle',
+                width: 70,
                 formatter: function (seen_episode) {
                     return '<b>' + seen_episode + '</b>';
                 }
@@ -383,6 +386,7 @@
                 title: 'Weekday',
                 align: 'center',
                 valign: 'middle',
+                width: 70,
                 formatter: function (week) {
                     if (week === dayOfWeek[new Date().getDay()]) {
                         return '<span style="color: red; "><b>' + week + '</b></span>';
@@ -395,6 +399,7 @@
                 align: 'center',
                 valign: 'middle',
                 sortable: 'true',
+                width: 100,
                 formatter: function (date) {
                     if (today === date) {
                         return '<span style="color: red; "><b>' + date + '</b></span>';
@@ -407,6 +412,7 @@
                 align: 'center',
                 valign: 'middle',
                 //sortable: 'true',
+                width: 70,
                 formatter: function (value, item) {
                     let t_now = new Date().format('hh:mm')
                     if (today === item.date && value <= t_now) {
@@ -478,7 +484,7 @@
             if (link.match(/^https?:\/\//)) {
                 let t_url = new URL(link)
                 let t_path = link.replace(/\/+$/, '').split('/')
-                return [true, '<b>' + t_url.hostname.substr(0, 6) + '</b>...' + t_path[t_path.length - 1].substr(0, 4)];
+                return [true, '<b>' + t_url.hostname.substr(0, 12) + '</b>...' + t_path[t_path.length - 1].substr(0, 12)];
             }
             return [false, link];
         }
