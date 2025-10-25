@@ -223,9 +223,7 @@
                 row['last_date'] = now;
                 row['past_time'] = '0天0小时';
                 ulrs = row["link"].split(';');
-                for (let v of urls) {
-                    window.open(v);
-                }
+                window.open(ulrs[0]);
                 $.post('/pt/last_date', {
                     "data": JSON.stringify({
                         "id": row['id'],
