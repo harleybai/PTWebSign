@@ -128,6 +128,18 @@
     </footer>
 
     <script>
+        $(document).ready(function () {
+            // poster 选择状态
+            const CHECKBOX_POSTER_STATE = 'checkbox_poster_state';
+            let poster_state = localStorage.getItem(CHECKBOX_POSTER_STATE);
+            if (poster_state !== null) {
+                $('#poster').prop('checked', poster_state === 'true');
+            }
+            $('#poster').on('change', function () {
+                localStorage.setItem(CHECKBOX_POSTER_STATE, $(this).prop('checked'));
+            })
+
+        })
         $('#input_value').keypress(function (e) {
             if (e.which === 13 || e.keyCode === 13) { // 检查是否按下回车键（keyCode 13）
                 $('#query_btn').click();
