@@ -86,8 +86,8 @@
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
                 <div class="form-inline">
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="input_value" />
+                    <div class="form-group" style="width: 50%;">
+                        <input type="text" class="form-control" style="width: 100%;" id="input_value" />
                     </div>
                     <div class="checkbox">
                         <label><input type="checkbox" id="poster">Poster</label>
@@ -136,6 +136,7 @@
                         info = info.replace(/\[img\].*?\[\/img\]/, '');
                     }
                     $("#movie_info").text(info);
+                    $("#input_value").val('');
                 }
             })
         });
