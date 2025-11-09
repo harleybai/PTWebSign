@@ -155,7 +155,7 @@
                     if (!$("#poster").prop('checked')) {
                         info = info.replace(/\[img\].*?\[\/img\]/, '');
                     }
-                    $("#movie_info").text(info);
+                    $("#movie_info").text(info.replace(/^\n+/, ''));
                     $("#movie_info_copy").click();
                     $("#input_value").val('');
                     $("#input_value").focus();
