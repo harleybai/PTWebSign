@@ -56,6 +56,9 @@
 </head>
 
 <body>
+    <!-- <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/clipboard.js/2.0.4/clipboard.min.js"></script> -->
     <script src="../js/jquery.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/clipboard.min.js"></script>
@@ -72,26 +75,44 @@
                 </button>
                 <a class="navbar-brand" href="/">PT Sign In</a>&nbsp;&nbsp;&nbsp;
                 <a class="navbar-brand" href="/playlist">Play List</a>&nbsp;&nbsp;&nbsp;
-                <a class="navbar-brand" href="#">Parse Video Link</a>
+                <a class="navbar-brand" href="/video">Parse Video Link</a>
                 <a class="navbar-brand" href="/ptsearch">PT Search</a>
-                <a class="navbar-brand" href="/ptgen">PT Gen</a>
+                <a class="navbar-brand" href="#">PT Gen</a>
             </div>
         </div>
     </nav>
 
     <div class="container-fluid" style="padding-top: 50px;">
         <div class="row">
-            <div class="col-sm-8 col-sm-offset-2 col-md-10 col-md-offset-1" id="div_info">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-8 col-sm-offset-2 col-md-10 col-md-offset-1">
+            <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
                 <div class="form-inline">
-                    <div class="zero-clipboard">
-                        <button class="btn btn-clipboard" data-clipboard-target="#linktext">复制</button>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="input_value" />
                     </div>
-                    <textarea class="input-xlarge col-sm-12" style="resize: none" id="linktext" rows="8"></textarea>
+                    <div class="checkbox">
+                        <label><input type="checkbox" id="poster">Poster</label>
+                    </div>
+                    <button class="btn btn-success" id="query_btn">查询</button>
                 </div>
+                <font class="medium">填写来自 <strong><a href="https://www.imdb.com">IMDb</a> / <a
+                            href="https://movie.douban.com">豆瓣</a> / <a
+                            href="https://www.themoviedb.org/?language=zh-CN">TMDB</a> / <a
+                            href="https://store.steampowered.com">Steam</a> / <a
+                            href="https://indienova.com">Indienova</a>
+                        / <a href="https://www.epicgames.com/store/zh-CN/">Epic</a> / <a
+                            href="https://bangumi.tv/">Bangumi</a></strong> 的链接</font>
+                <br>
+            </div>
+            <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+                <hr>
+            </div>
+            <div id="gen_help" class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3" style="display: none">
+            </div>
+            <div id="gen_out" class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+                <div class="zero-clipboard">
+                    <button class="btn btn-clipboard" data-clipboard-target="#movie_info">复制</button>
+                </div>
+                <textarea class="form-control" rows=22 id="movie_info"></textarea>
             </div>
         </div>
     </div>
@@ -106,43 +127,17 @@
     </footer>
 
     <script>
-        $("#linktext").change(function () {
-            let input = $("#linktext").val().trim();
-            $('div#div_info').html('');
-            if (input.match(/www\.kisssub\.org/) || input.match(/^\w{40}$/)) {
-                let match = input.match(/show-(\w+)\./);
-                let magnet = 'magnet:?xt=urn:btih:' + (match ? match[1] : input);
-                $("#linktext").val(magnet);
-            } else if (input.match(/^mtopjsonp1/)) {
-                input = input.replace(/\s*mtopjsonp1\(/, '').replace(/\)\s*$/, '');
-                let jsonInput = JSON.parse(input);
-                let title = jsonInput.data.data.show.title;
-                let subtitle = jsonInput.data.data.video.title;
-                let videoInfo = jsonInput.data.data.stream;
-                for (let i = 0; i < videoInfo.length; i++) {
-                    let width = videoInfo[i].width;
-                    let height = videoInfo[i].height;
-                    if (width == 1920) {
-                        $('div#div_info').html('<div class="alert alert-success">成功, ' + title + '>' + subtitle + '( ' + width + ' x ' + height + ' )</div>');
-                        $("#linktext").val(videoInfo[i].m3u8_url);
-                        break;
+        $("#query_btn").click(function () {
+            let input = $("#input_value").val();
+            $.getJSON('https://ptgen.tju.pt/infogen?url=' + input, function (data) {
+                if (data.format) {
+                    let info = data['format'] + "\n\n"
+                    if (!$("#poster").prop('checked')) {
+                        info = info.replace(/\[img\].*?\[\/img\]/, '');
                     }
+                    $("#movie_info").text(info);
                 }
-            } else {
-                let jsonInput = JSON.parse(input);
-                let videoInfo = JSON.parse(jsonInput.vinfo);
-                let link = videoInfo.vl.vi[0].ul.ui[0].url;
-                let title = videoInfo.vl.vi[0].ti;
-                let width = videoInfo.vl.vi[0].vw;
-                let height = videoInfo.vl.vi[0].vh;
-                $('div#div_info').html('<div class="alert alert-success">成功, Title = ' + title + '( ' + width + ' x ' + height + ' )</div>');
-                $("#linktext").val(link);
-            }
-            $('.btn-clipboard').click();
-        });
-        $("#linktext").dblclick(function () {
-            $("#linktext").val('');
-            $('div#div_info').html('');
+            })
         });
         // 页面复制相关
         new ClipboardJS('.btn-clipboard');

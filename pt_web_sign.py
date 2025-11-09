@@ -36,6 +36,10 @@ def playlist_page():
 def playlist_page():
     return static_file('ptsearch.html', './static/html')
 
+# pt_gen
+@app.route('/ptgen', method='GET')
+def playlist_page():
+    return static_file('ptgen.html', './static/html')
 
 # play list
 @app.route('/play/data', method='GET')
