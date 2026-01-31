@@ -149,7 +149,11 @@
         });
         $("#query_btn").click(function () {
             let input = $("#input_value").val();
-            $.getJSON('https://ptgen.tju.pt/infogen?url=' + input, function (data) {
+            let api = `https://ptgen.tju.pt/infogen?url=${input}`;
+            if (input.match(/douban\.com/)) {
+                api = `https://api.iyuns.com/api/dbys?url=${input}`;
+            }
+            $.getJSON(api, function (data) {
                 if (data.format) {
                     let info = data['format'] + "\n\n"
                     if (!$("#poster").prop('checked')) {

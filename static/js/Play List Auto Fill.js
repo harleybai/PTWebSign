@@ -6,9 +6,10 @@
 // @grant       unsafeWindow
 // @grant       GM_xmlhttpRequest
 // @include     http://127.0.0.1:8080/playlist*
-// @version     20190812
+// @version     20251230
 // ==/UserScript==
 
+/* global $ */
 (function () {
 
 	function requestData(url, successHandle, timeoutHandle) {
@@ -56,6 +57,7 @@
 				let time = "";
 				// 总集数
 				let progress_total = 0;
+				let weekday = "";
 
 				if (link.match(/www\.bilibili\.com/)) {
 					img = page.find("#app div.common-lazy-img>img").attr("src");
@@ -77,12 +79,9 @@
 					if (m[3]) {
 						let isPush = false;
 						for (let key in weekToEnglish) {
-							if (key == m[1])
-								isPush = true;
-							if (isPush)
-								weekdayChecked.push(weekToEnglish[key]);
-							if (key == m[3])
-								isPush = false;
+							if (key == m[1]) { isPush = true; }
+							if (isPush) { weekdayChecked.push(weekToEnglish[key]); }
+							if (key == m[3]) { isPush = false; }
 						}
 					}
 				}
