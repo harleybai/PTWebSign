@@ -86,8 +86,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2 col-md-10 col-md-offset-1 main">
-                <div id="div_info">
-                </div>
+
                 <div id="toolbar" class="form-inline">
                     <button type="button" id="toggle_finish" class="btn btn-primary"><i class="fa fa-chevron-down"></i>
                         Show Finish
@@ -102,6 +101,7 @@
                 <div class="table-responsive">
                     <table id="table"></table>
                 </div>
+                <div id="div_info"> </div>
             </div>
         </div>
     </div>
@@ -270,12 +270,12 @@
                     info.id = row['id'];
                     console.log(info);
                     $.post('/play/update', info, function (res) {
-                        console.log(res);
-                        new_message(res.code, res.msg);
                         if (res.code === 0) {
                             location.reload();
                         }
                         $('#my_modal button.close').click();
+                        new_message(res.code, res.msg);
+                        console.log(res);
                     });
                 })
             },
@@ -298,7 +298,6 @@
                         info.progress = progress_add_one(info.progress);
                         info.seen_episode = seen_episode_add_one(info.seen_episode);
                         $.post('/play/update', info, function (res) {
-                            new_message(res.code, res.msg);
                             if (res.code === 0) {
                                 $('#table').bootstrapTable('remove', {
                                     field: 'id',
@@ -307,9 +306,9 @@
                                 format_append([info]);
                             }
                         })
-                    } else {
-                        new_message(res.code, res.msg);
                     }
+                    new_message(res.code, res.msg);
+                    console.log(res);
                 });
             }
         };
@@ -573,10 +572,10 @@
             });
         }
 
-        let msg_timeout;
+        var msg_timeout;
 
         function new_message(code, msg) {
-            clearTimeout(msg_timeout);
+            if (msg_timeout) clearTimeout(msg_timeout);
             if (code == 0) {
                 $('div#div_info').html('<div class="alert alert-success">' + msg + '</div>');
             } else {
@@ -584,7 +583,7 @@
             }
             msg_timeout = setTimeout(function () {
                 $('div#div_info').html('');
-            }, 2000);
+            }, 3000);
         }
 
         $('button#toggle_finish').click(function () {
@@ -667,10 +666,10 @@
                 $.post('/play/add', {
                     'data': JSON.stringify(data)
                 }, function (res) {
-                    console.log(res);
-                    new_message(res.code, res.msg);
                     $('#my_modal button.close').click();
                     location.reload();
+                    new_message(res.code, res.msg);
+                    console.log(res);
                 });
             });
         });
