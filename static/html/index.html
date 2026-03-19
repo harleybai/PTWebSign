@@ -223,8 +223,8 @@
                 let now = new Date().format("yyyy-MM-dd hh:mm:ss");
                 row['last_date'] = now;
                 row['past_time'] = '0天0小时';
-                ulrs = row["link"].split(';');
-                window.open(ulrs[0]);
+                urls = row["link"].split(/[;\n]/);
+                window.open(urls[0]);
                 $.post('/pt/last_date', {
                     "data": JSON.stringify({
                         "id": row['id'],
@@ -302,7 +302,7 @@
                 title: 'Link',
                 align: 'left',
                 formatter: function (link) {
-                    urls = link.split(';')
+                    urls = link.split(/[;\n]/);
                     aTags = [];
                     for (let v of urls) {
                         aTags.push('<a href="' + v + '" target="_blank">' + v + '</a>');
