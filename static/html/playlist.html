@@ -162,44 +162,86 @@
         };
         //输入组件
         const idModel = (value = '') => {
-            return `<div class="form-group"><label for="f_id" class="col-sm-2 control-label">ID</label><div class="col-sm-10"><input id="f_id" type="text" class="form-control" readonly value="${value}"></div></div>`;
+            return `<div class="form-group">
+                <label for="f_id" class="col-sm-2 control-label">ID</label>
+                <div class="col-sm-10"><input id="f_id" type="text" class="form-control" readonly value="${value}"></div>
+                </div>`;
         };
         const picModel = (value = '') => {
-            return `<div class="form-group"><label for="f_pic" class="col-sm-2 control-label">海报</label><div class="col-sm-10"><input id="f_pic" type="text" class="form-control" value="${value}"></div></div>`;
+            return `<div class="form-group">
+                <label for="f_pic" class="col-sm-2 control-label">海报</label>
+                <div class="col-sm-10"><input id="f_pic" type="text" class="form-control" value="${value}" placeholder="请输入海报链接..."></div>
+                </div>`;
         };
         const titleModel = (value = '') => {
-            return `<div class="form-group" id="d_title"><label for="f_title" class="col-sm-2 control-label">标题</label><div class="col-sm-10"><input id="f_title" type="text" class="form-control" value="${value}"></div></div>`;
+            return `<div class="form-group" id="d_title">
+                <label for="f_title" class="col-sm-2 control-label">标题</label>
+                <div class="col-sm-10"><input id="f_title" type="text" class="form-control" value="${value}" placeholder="请输入标题..."></div>
+                </div>`;
         };
         const typeModel = (value = '', disabled = false) => {
             const movieChecked = value === typeMovie ? 'checked' : '';
             const animeChecked = value === typeAnime ? 'checked' : '';
             const tvChecked = value === typeTV ? 'checked' : '';
             const disabledAttr = disabled ? 'disabled' : '';
-            return `<div class="form-group"><label class="radio-inline"><input name="f_type" type="radio" value="${typeAnime}" ${animeChecked} ${disabledAttr}>动漫</label><label for="f_type" class="col-sm-2 control-label">类型</label><div class="col-sm-10"><label class="radio-inline"><input name="f_type" type="radio" value="${typeMovie}" ${movieChecked} ${disabledAttr}>电影</label><label class="radio-inline"><input name="f_type" type="radio" value="${typeTV}" ${tvChecked} ${disabledAttr}>电视剧</label></div></div>`;
+            return `<div class="form-group"><label for="f_type" class="col-sm-2 control-label">类型</label><div class="col-sm-10">
+                <label class="radio-inline"><input name="f_type" type="radio" value="${typeAnime}" ${animeChecked} ${disabledAttr}>动漫</label>
+                <label class="radio-inline"><input name="f_type" type="radio" value="${typeMovie}" ${movieChecked} ${disabledAttr}>电影</label>
+                <label class="radio-inline"><input name="f_type" type="radio" value="${typeTV}" ${tvChecked} ${disabledAttr}>电视剧</label>
+                </div></div>`;
         };
         const progressModel = (value = '') => {
-            return `<div class="form-inline"><label for="f_progress" class="col-sm-2 control-label">观看进度</label><input id="f_progress" type="text" class="form-control" value="${value}"><button id="p_add" class="btn btn-default" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button></div><br>`;
+            return `<div class="form-inline">
+                <label for="f_progress" class="col-sm-2 control-label">观看进度</label>
+                <input id="f_progress" type="text" class="form-control" value="${value}"><button id="p_add" class="btn btn-default" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                </div><br>`;
         };
         const seenEpModel = (value = '') => {
-            return `<div class="form-inline"><label for="f_seen_episode" class="col-sm-2 control-label">已观看集数</label><input id="f_seen_episode" type="text" class="form-control" value="${value}"><button id="seen_episode_add" class="btn btn-default" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button></div><br>`;
+            return `<div class="form-inline">
+                <label for="f_seen_episode" class="col-sm-2 control-label">已观看集数</label>
+                <input id="f_seen_episode" type="text" class="form-control" value="${value}"><button id="seen_episode_add" class="btn btn-default" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                </div><br>`;
         };
         const dateModel = (value = '') => {
-            return `<div class="form-group"><label for="f_date" class="col-sm-2 control-label">首播日期</label><div class="col-sm-10"><input id="f_date" type="date" class="form-control" value="${value}"></div></div>`;
+            return `<div class="form-group">
+                <label for="f_date" class="col-sm-2 control-label">首播日期</label><div class="col-sm-10">
+                <input id="f_date" type="date" class="form-control" value="${value}" placeholder="YYYY-MM-DD" onkeydown="this.type='text'" onblur="if(!this.value) this.type='date'">
+                </div></div>`;
         };
         const weekModel = () => {
-            return `<div class="form-group" id="d_week"><label for="f_week" class="col-sm-2 control-label">周播</label><div class="col-sm-10"><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Monday">星期一</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Tuesday">星期二</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Wednesday">星期三</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Thursday">星期四</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Friday">星期五</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Saturday">星期六</label><label class="checkbox-inline"><input type="checkbox" class="f_week" value="Sunday">星期日</label></div></div>`;
+            return `<div class="form-group" id="d_week"><label for="f_week" class="col-sm-2 control-label">周播</label><div class="col-sm-10">
+                <label class="checkbox-inline"><input type="checkbox" class="f_week" value="Monday">星期一</label>
+                <label class="checkbox-inline"><input type="checkbox" class="f_week" value="Tuesday">星期二</label>
+                <label class="checkbox-inline"><input type="checkbox" class="f_week" value="Wednesday">星期三</label>
+                <label class="checkbox-inline"><input type="checkbox" class="f_week" value="Thursday">星期四</label>
+                <label class="checkbox-inline"><input type="checkbox" class="f_week" value="Friday">星期五</label>
+                <label class="checkbox-inline"><input type="checkbox" class="f_week" value="Saturday">星期六</label>
+                <label class="checkbox-inline"><input type="checkbox" class="f_week" value="Sunday">星期日</label>
+                </div></div>`;
         };
         const timeModel = (value = '') => {
-            return `<div class="form-group"><label for="f_time" class="col-sm-2 control-label">播出时间</label><div class="col-sm-10"><input id="f_time" type="time" class="form-control" value="${value}"></div></div>`;
+            return `<div class="form-group">
+                <label for="f_time" class="col-sm-2 control-label">播出时间</label>
+                <div class="col-sm-10"><input id="f_time" type="time" class="form-control" value="${value}"></div>
+                </div>`;
         };
         const doubanModel = (value = '') => {
-            return `<div class="form-group"><label for="f_douban" class="col-sm-2 control-label">豆瓣链接</label><div class="col-sm-10"><input id="f_douban" type="text" class="form-control" value="${value}" placeholder="请输入豆瓣链接，支持自动填充信息"></div></div>`;
+            return `<div class="form-group">
+                <label for="f_douban" class="col-sm-2 control-label">豆瓣链接</label>
+                <div class="col-sm-10"><input id="f_douban" type="text" class="form-control" value="${value}" placeholder="请输入豆瓣链接，支持自动填充信息..."></div>
+                </div>`;
         };
         const bgmModel = (value = '') => {
-            return `<div class="form-group"><label for="f_bgm" class="col-sm-2 control-label">BGM链接</label><div class="col-sm-10"><input id="f_bgm" type="text" class="form-control" value="${value}" placeholder="请输入BGM链接"></div></div>`;
+            return `<div class="form-group">
+                <label for="f_bgm" class="col-sm-2 control-label">BGM链接</label>
+                <div class="col-sm-10"><input id="f_bgm" type="text" class="form-control" value="${value}" placeholder="请输入BGM链接..."></div>
+                </div>`;
         };
         const videoModel = (value = '') => {
-            return `<div class="form-group"><label for="f_video" class="col-sm-2 control-label">视频链接</label><div class="col-sm-10"><input id="f_video" type="text" class="form-control" value="${value}" placeholder="请输入视频链接"></div></div>`;
+            return `<div class="form-group">
+                <label for="f_video" class="col-sm-2 control-label">视频链接</label>
+                <div class="col-sm-10"><input id="f_video" type="text" class="form-control" value="${value}" placeholder="请输入视频链接..."></div>
+                </div>`;
         };
 
         //时间格式化
