@@ -227,7 +227,7 @@ def get_site_config():
 
 
 # common
-@app.route("/<file_type:re:css|js|fonts>/<filename:path>", method="GET")
+@app.route("/<file_type:re:css|js|fonts|icon>/<filename:path>", method="GET")
 def server_static(file_type, filename):
     return static_file(filename, root="static/" + file_type)
 

@@ -36,13 +36,15 @@
 		console.log("fillInfo: ", data)
 		if (data?.pic && !$('input#f_pic').val()) $('input#f_pic').val(data.pic);
 		if (data?.progress) {
-			const pNow = $('input#f_progress').val().trim() == '' ? 0 : parseInt($('input#f_progress').val().trim());
-			$('input#f_progress').val(pNow + '/' + data.progress);
+			const pv = $('input#f_progress').val().trim();
+			const pNow = pv == '' ? 0 : parseInt(pv);
+			const pTotal = parseInt(pv.replace(/^\d+\//, ''));
+			$('input#f_progress').val(pNow + '/' + data.progress > pTotal ? data.progress : pTotal);
 		}
 		if (data?.title) $('input#f_title').val(data.title);
 		if (data?.date) $('input#f_date').val(data.date);
 		if (data?.time) $('input#f_time').val(data.time);
-		if (data?.week) {
+		if (data?.week && data.week.length > 0) {
 			$("#d_week input:checkbox").each(function () {
 				$(this).prop("checked", false);
 				if (data.week.includes($(this).val()) || data.week.includes($(this).closest('label').text())) {
@@ -153,7 +155,7 @@
 			requestHTML($('input#f_douban').val().trim(), function (res) {
 				const page = $(res.responseText.match(/<body[^>]*?>([\S\s]+)<\/body>/)[1].replace(/<script(\s|>)[\S\s]+?<\/script>/g, ''));
 
-				let title = page.find('h1>span:first').text().trim().replace(/[\w\d-\s:,]*$/, '');// 标题
+				let title = page.find('h1>span:first').text().trim();// 标题
 				let img = page.find("div#mainpic img").attr("src");// 海报
 				let date = page.find("div#info span[property='v:initialReleaseDate']").text().match(/\d+-\d+-\d+/);// 日期
 				let progress_total = '';// 总集数
@@ -164,6 +166,8 @@
 					if (label === '集数:') progress_total = parseInt(textNode.textContent.trim()) || 0;
 					if (label === '又名:') akaText = textNode.textContent.trim();
 				});
+				let m = akaText.match(/第(\d+)-(\d+)集/);
+				if (m) progress_total = m[2];
 				fillInfo({
 					'pic': img.match(/^http/) ? img : '',
 					'title': title,
