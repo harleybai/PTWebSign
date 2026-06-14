@@ -469,7 +469,7 @@
                         let progress = parseInt(100 * m[1] / m[2]);
                         let prg_bar_type = ['progress-bar-success', 'progress-bar-info', 'progress-bar-warning', 'progress-bar-danger'];
                         let prg_bar_index = Math.floor(Math.random() * 4);
-                        return '<b>' + prg + '</b><br><div class="progress progress-striped" style="height:8px"><div class="progress-bar ' + prg_bar_type[prg_bar_index] + '" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:' + progress + '%;"></div></div>';
+                        return `<b>${prg}</b><br><div class="progress progress-striped active" style="height:16px"><div class="progress-bar ${prg_bar_type[prg_bar_index]}" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:${progress}%;"></div></div>`;
                     }
                     return '<b>' + prg + '</b>';
                 }
