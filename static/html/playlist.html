@@ -504,10 +504,7 @@
                 formatter: function (play_date, item) {
                     updated_at = item.updated_at || "";
                     updated_at_show = updated_at || "--";
-                    if (
-                        (today === play_date && play_date > updated_at) ||
-                        (today !== play_date && updated_at && play_date > updated_at)
-                    ) {
+                    if ((today === play_date && play_date > updated_at)) {
                         return '<span style="color: red; "><b>' + play_date + '</b><br>' + updated_at_show + '</span>';
                     }
                     return play_date + '<br>' + updated_at_show;
