@@ -85,6 +85,7 @@ def play_add():
         if k not in t_data:
             return {"code": 1, "msg": "add play info failed.", "data": t_data}
     t_data["pic"] = img_download_play_list(t_data["pic"])
+    t_data["updated_at"] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     model.create_play(t_data)
     return {"code": 0, "msg": "add paly info successfully."}
 
@@ -108,7 +109,7 @@ def playlist_page_update():
     try:
         t_pic = img_download_play_list(t_pic)
         sql = (
-            "UPDATE t_play SET pic = '%s', title = '%s', progress = '%s', week = '%s', date = '%s', time = '%s', douban = '%s', bgm = '%s', video = '%s', seen_episode = '%s' where id = %d"
+            "UPDATE t_play SET pic = '%s', title = '%s', progress = '%s', week = '%s', date = '%s', time = '%s', douban = '%s', bgm = '%s', video = '%s', seen_episode = '%s', updated_at = '%s' where id = %d"
             % (
                 t_pic,
                 t_title,
@@ -120,6 +121,7 @@ def playlist_page_update():
                 t_bgm,
                 t_video,
                 t_seen_episode,
+                time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
                 t_id,
             )
         )

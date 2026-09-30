@@ -10,8 +10,7 @@ conn = sqlite3.connect("data/video.db")
 
 def init():
     c = conn.cursor()
-    c.execute(
-        """CREATE TABLE IF NOT EXISTS `t_pt` (
+    c.execute("""CREATE TABLE IF NOT EXISTS `t_pt` (
         `id` INTEGER PRIMARY KEY AUTOINCREMENT,
         `name` VARCHAR(255) NOT NULL,
         `level` VARCHAR(255),
@@ -21,10 +20,8 @@ def init():
         `sign_in` TINYINT,
         `status` TINYINT,
         `desc` TEXT
-        );"""
-    )
-    c.execute(
-        """CREATE TABLE IF NOT EXISTS `t_play` (
+        );""")
+    c.execute("""CREATE TABLE IF NOT EXISTS `t_play` (
         `id` INTEGER PRIMARY KEY AUTOINCREMENT,
         `pic` VARCHAR(255) NOT NULL,
         `title` VARCHAR(255),
@@ -36,9 +33,9 @@ def init():
         `douban` VARCHAR(255),
         `bgm` VARCHAR(255),
         `video` VARCHAR(255),
-        `seen_episode` VARCHAR(32)
-        );"""
-    )
+        `seen_episode` VARCHAR(32),
+        `updated_at` CHAR(19)
+        );""")
     conn.commit()
 
 
@@ -123,7 +120,7 @@ def create_play(data):
     c = conn.cursor()
     c.execute(
         """
-           INSERT INTO `t_play` (`pic`,`title`,`type`,`progress`,`week`,`date`,`time`,`douban`,`bgm`,`video`,`seen_episode`)
+           INSERT INTO `t_play` (`pic`,`title`,`type`,`progress`,`week`,`date`,`time`,`douban`,`bgm`,`video`,`seen_episode`,`updated_at`)
            VALUES ('%s','%s',%d,'%s','%s','%s','%s','%s','%s','%s','%s');
         """
         % (
@@ -138,6 +135,7 @@ def create_play(data):
             data["bgm"],
             data["video"],
             data["seen_episode"],
+            data["updated_at"],
         )
     )
     conn.commit()
@@ -184,6 +182,7 @@ def format_play(data):
                 "bgm": row[9],
                 "video": row[10],
                 "seen_episode": row[11],
+                "updated_at": row[12],
             }
         )
     return res
