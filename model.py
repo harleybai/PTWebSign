@@ -121,7 +121,7 @@ def create_play(data):
     c.execute(
         """
            INSERT INTO `t_play` (`pic`,`title`,`type`,`progress`,`week`,`date`,`time`,`douban`,`bgm`,`video`,`seen_episode`,`updated_at`)
-           VALUES ('%s','%s',%d,'%s','%s','%s','%s','%s','%s','%s','%s');
+           VALUES ('%s','%s',%d,'%s','%s','%s','%s','%s','%s','%s','%s','%s');
         """
         % (
             data["pic"],
