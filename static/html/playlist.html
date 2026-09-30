@@ -500,12 +500,17 @@
                 align: 'center',
                 valign: 'middle',
                 sortable: 'true',
-                width: 100,
-                formatter: function (play_date) {
-                    if (today === play_date) {
-                        return '<span style="color: red; "><b>' + play_date + '</b></span>';
+                width: 150,
+                formatter: function (play_date, item) {
+                    updated_at = item.updated_at || "";
+                    updated_at_show = updated_at || "--";
+                    if (
+                        (today === play_date && play_date > updated_at) ||
+                        (today !== play_date && updated_at && play_date > updated_at)
+                    ) {
+                        return '<span style="color: red; "><b>' + play_date + '</b><br>' + updated_at_show + '</span>';
                     }
-                    return play_date;
+                    return play_date + '<br>' + updated_at_show;
                 }
             }, {
                 field: 'time',
@@ -633,6 +638,7 @@
                 'week': data.week,
                 'date': data.date,
                 'play_date': data.play_date,
+                'updated_at': data.updated_at,
                 'time': data.time,
                 'douban': data.douban,
                 'bgm': data.bgm,
