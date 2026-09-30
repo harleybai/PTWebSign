@@ -244,9 +244,9 @@ def error404():
     return "Nothing here, sorry"
 
 
-def img_download_play_list(url):
+def img_download_play_list(url: str) -> str:
     # 不是外部图片，则不下载
-    if not url.startswith("http"):
+    if not url or not url.startswith("http"):
         return url
     # 保存图片路径
     img_type = url.split("/")[-1].split(".")[-1]
@@ -263,13 +263,12 @@ def img_download_play_list(url):
     # 下载图片
     try:
         headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
             "Referer": url,
             "Accept": "image/webp,image/apng,image/*,*/*;q=0.8",
             "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
-            "Connection": "keep-alive",
         }
-        rsp = requests.get(url, headers=headers)
+        rsp = requests.get(url, headers=headers, timeout=(5, 10))
         if rsp.status_code == 200:
             with open(pic, "wb") as file:
                 file.write(rsp.content)
