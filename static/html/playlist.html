@@ -489,7 +489,8 @@
                 valign: 'middle',
                 width: 80,
                 formatter: function (week, item) {
-                    if (today === item.play_date && week === dayOfWeek[new Date().getDay()]) {
+                    let updated_at = item.updated_at || "";
+                    if (today === item.play_date && item.play_date > updated_at && week === dayOfWeek[new Date().getDay()]) {
                         return '<span style="color: red; "><b>' + week + '</b></span>';
                     }
                     return '<b>' + (week === '' ? '--' : week) + '</b>';
@@ -502,8 +503,8 @@
                 sortable: 'true',
                 width: 150,
                 formatter: function (play_date, item) {
-                    updated_at = item.updated_at || "";
-                    updated_at_show = updated_at || "--";
+                    let updated_at = item.updated_at || "";
+                    let updated_at_show = updated_at || "--";
                     if ((today === play_date && play_date > updated_at)) {
                         return '<span style="color: red; "><b>' + play_date + '</b><br>' + updated_at_show + '</span>';
                     }
@@ -517,7 +518,8 @@
                 width: 70,
                 formatter: function (value, item) {
                     let t_now = new Date().format('hh:mm')
-                    if (today === item.play_date && value <= t_now) {
+                    let updated_at = item.updated_at || "";
+                    if (today === item.play_date && item.play_date > updated_at && value <= t_now) {
                         return '<span style="color: red; "><b>' + value + '</b></span>';
                     }
                     return value === '' ? '--' : value;
